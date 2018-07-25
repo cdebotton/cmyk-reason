@@ -1,0 +1,6 @@
+lib
+.merlin
+dist
+.ssl
+node_modules
+yarn-error.log

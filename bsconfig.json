@@ -1,0 +1,30 @@
+{
+  "name": "cmyk",
+  "version": "1.0.0",
+  "sources": [
+    {
+      "dir": "app",
+      "subdirs": true
+    },
+    {
+      "dir": "client",
+      "subdirs": true
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "commonjs"
+    },
+    {
+      "module": "es6"
+    }
+  ],
+  "suffix": ".bs.js",
+  "refmt": 3,
+  "reason": {
+    "react-jsx": 2
+  },
+  "namespace": true,
+  "bs-dependencies": ["bs-css", "reason-react", "reason-apollo"],
+  "ppx-flags": ["graphql_ppx/ppx"]
+}

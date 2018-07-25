@@ -1,0 +1,6 @@
+projects:
+  cmyk:
+    schemaPath: server/api/prisma.graphql
+    extensions:
+      endpoints:
+        default: 'http://localhost:4466'

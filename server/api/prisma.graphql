@@ -1,0 +1,2112 @@
+# source: http://localhost:4466
+# timestamp: Wed Jul 25 2018 15:23:39 GMT-0400 (EDT)
+
+type AggregateDocument {
+  count: Int!
+}
+
+type AggregateDocumentType {
+  count: Int!
+}
+
+type AggregateProfile {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+type BatchPayload {
+  """
+  The number of nodes that have been affected by the Batch operation.
+  """
+  count: Long!
+}
+
+scalar DateTime
+
+type Document implements Node {
+  id: ID!
+  publishDate: DateTime!
+  title: String!
+  type(where: DocumentTypeWhereInput): DocumentType!
+  author(where: UserWhereInput): User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A connection to a list of items.
+"""
+type DocumentConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [DocumentEdge]!
+  aggregate: AggregateDocument!
+}
+
+input DocumentCreateInput {
+  publishDate: DateTime!
+  title: String!
+  type: DocumentTypeCreateOneWithoutDocumentsInput!
+  author: UserCreateOneWithoutDocumentsInput
+}
+
+input DocumentCreateManyWithoutAuthorInput {
+  create: [DocumentCreateWithoutAuthorInput!]
+  connect: [DocumentWhereUniqueInput!]
+}
+
+input DocumentCreateManyWithoutTypeInput {
+  create: [DocumentCreateWithoutTypeInput!]
+  connect: [DocumentWhereUniqueInput!]
+}
+
+input DocumentCreateWithoutAuthorInput {
+  publishDate: DateTime!
+  title: String!
+  type: DocumentTypeCreateOneWithoutDocumentsInput!
+}
+
+input DocumentCreateWithoutTypeInput {
+  publishDate: DateTime!
+  title: String!
+  author: UserCreateOneWithoutDocumentsInput
+}
+
+"""
+An edge in a connection.
+"""
+type DocumentEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Document!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum DocumentOrderByInput {
+  id_ASC
+  id_DESC
+  publishDate_ASC
+  publishDate_DESC
+  title_ASC
+  title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type DocumentPreviousValues {
+  id: ID!
+  publishDate: DateTime!
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DocumentSubscriptionPayload {
+  mutation: MutationType!
+  node: Document
+  updatedFields: [String!]
+  previousValues: DocumentPreviousValues
+}
+
+input DocumentSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [DocumentSubscriptionWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [DocumentSubscriptionWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [DocumentSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: DocumentWhereInput
+}
+
+type DocumentType implements Node {
+  id: ID!
+  title: String!
+  documents(
+    where: DocumentWhereInput
+    orderBy: DocumentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Document!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A connection to a list of items.
+"""
+type DocumentTypeConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [DocumentTypeEdge]!
+  aggregate: AggregateDocumentType!
+}
+
+input DocumentTypeCreateInput {
+  title: String!
+  documents: DocumentCreateManyWithoutTypeInput
+}
+
+input DocumentTypeCreateOneWithoutDocumentsInput {
+  create: DocumentTypeCreateWithoutDocumentsInput
+  connect: DocumentTypeWhereUniqueInput
+}
+
+input DocumentTypeCreateWithoutDocumentsInput {
+  title: String!
+}
+
+"""
+An edge in a connection.
+"""
+type DocumentTypeEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DocumentType!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum DocumentTypeOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type DocumentTypePreviousValues {
+  id: ID!
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DocumentTypeSubscriptionPayload {
+  mutation: MutationType!
+  node: DocumentType
+  updatedFields: [String!]
+  previousValues: DocumentTypePreviousValues
+}
+
+input DocumentTypeSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [DocumentTypeSubscriptionWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [DocumentTypeSubscriptionWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [DocumentTypeSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: DocumentTypeWhereInput
+}
+
+input DocumentTypeUpdateInput {
+  title: String
+  documents: DocumentUpdateManyWithoutTypeInput
+}
+
+input DocumentTypeUpdateOneWithoutDocumentsInput {
+  create: DocumentTypeCreateWithoutDocumentsInput
+  connect: DocumentTypeWhereUniqueInput
+  delete: Boolean
+  update: DocumentTypeUpdateWithoutDocumentsDataInput
+  upsert: DocumentTypeUpsertWithoutDocumentsInput
+}
+
+input DocumentTypeUpdateWithoutDocumentsDataInput {
+  title: String
+}
+
+input DocumentTypeUpsertWithoutDocumentsInput {
+  update: DocumentTypeUpdateWithoutDocumentsDataInput!
+  create: DocumentTypeCreateWithoutDocumentsInput!
+}
+
+input DocumentTypeWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [DocumentTypeWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [DocumentTypeWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [DocumentTypeWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  title: String
+
+  """
+  All values that are not equal to given value.
+  """
+  title_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  title_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  title_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  title_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  title_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  title_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  title_gte: String
+
+  """
+  All values containing the given string.
+  """
+  title_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  title_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  title_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  title_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  title_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  title_not_ends_with: String
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  documents_every: DocumentWhereInput
+  documents_some: DocumentWhereInput
+  documents_none: DocumentWhereInput
+}
+
+input DocumentTypeWhereUniqueInput {
+  id: ID
+}
+
+input DocumentUpdateInput {
+  publishDate: DateTime
+  title: String
+  type: DocumentTypeUpdateOneWithoutDocumentsInput
+  author: UserUpdateOneWithoutDocumentsInput
+}
+
+input DocumentUpdateManyWithoutAuthorInput {
+  create: [DocumentCreateWithoutAuthorInput!]
+  connect: [DocumentWhereUniqueInput!]
+  disconnect: [DocumentWhereUniqueInput!]
+  delete: [DocumentWhereUniqueInput!]
+  update: [DocumentUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [DocumentUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input DocumentUpdateManyWithoutTypeInput {
+  create: [DocumentCreateWithoutTypeInput!]
+  connect: [DocumentWhereUniqueInput!]
+  disconnect: [DocumentWhereUniqueInput!]
+  delete: [DocumentWhereUniqueInput!]
+  update: [DocumentUpdateWithWhereUniqueWithoutTypeInput!]
+  upsert: [DocumentUpsertWithWhereUniqueWithoutTypeInput!]
+}
+
+input DocumentUpdateWithoutAuthorDataInput {
+  publishDate: DateTime
+  title: String
+  type: DocumentTypeUpdateOneWithoutDocumentsInput
+}
+
+input DocumentUpdateWithoutTypeDataInput {
+  publishDate: DateTime
+  title: String
+  author: UserUpdateOneWithoutDocumentsInput
+}
+
+input DocumentUpdateWithWhereUniqueWithoutAuthorInput {
+  where: DocumentWhereUniqueInput!
+  data: DocumentUpdateWithoutAuthorDataInput!
+}
+
+input DocumentUpdateWithWhereUniqueWithoutTypeInput {
+  where: DocumentWhereUniqueInput!
+  data: DocumentUpdateWithoutTypeDataInput!
+}
+
+input DocumentUpsertWithWhereUniqueWithoutAuthorInput {
+  where: DocumentWhereUniqueInput!
+  update: DocumentUpdateWithoutAuthorDataInput!
+  create: DocumentCreateWithoutAuthorInput!
+}
+
+input DocumentUpsertWithWhereUniqueWithoutTypeInput {
+  where: DocumentWhereUniqueInput!
+  update: DocumentUpdateWithoutTypeDataInput!
+  create: DocumentCreateWithoutTypeInput!
+}
+
+input DocumentWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [DocumentWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [DocumentWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [DocumentWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  publishDate: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  publishDate_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  publishDate_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  publishDate_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  publishDate_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  publishDate_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  publishDate_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  publishDate_gte: DateTime
+  title: String
+
+  """
+  All values that are not equal to given value.
+  """
+  title_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  title_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  title_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  title_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  title_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  title_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  title_gte: String
+
+  """
+  All values containing the given string.
+  """
+  title_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  title_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  title_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  title_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  title_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  title_not_ends_with: String
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  type: DocumentTypeWhereInput
+  author: UserWhereInput
+}
+
+input DocumentWhereUniqueInput {
+  id: ID
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createUser(data: UserCreateInput!): User!
+  createProfile(data: ProfileCreateInput!): Profile!
+  createDocumentType(data: DocumentTypeCreateInput!): DocumentType!
+  createDocument(data: DocumentCreateInput!): Document!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateProfile(
+    data: ProfileUpdateInput!
+    where: ProfileWhereUniqueInput!
+  ): Profile
+  updateDocumentType(
+    data: DocumentTypeUpdateInput!
+    where: DocumentTypeWhereUniqueInput!
+  ): DocumentType
+  updateDocument(
+    data: DocumentUpdateInput!
+    where: DocumentWhereUniqueInput!
+  ): Document
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteProfile(where: ProfileWhereUniqueInput!): Profile
+  deleteDocumentType(where: DocumentTypeWhereUniqueInput!): DocumentType
+  deleteDocument(where: DocumentWhereUniqueInput!): Document
+  upsertUser(
+    where: UserWhereUniqueInput!
+    create: UserCreateInput!
+    update: UserUpdateInput!
+  ): User!
+  upsertProfile(
+    where: ProfileWhereUniqueInput!
+    create: ProfileCreateInput!
+    update: ProfileUpdateInput!
+  ): Profile!
+  upsertDocumentType(
+    where: DocumentTypeWhereUniqueInput!
+    create: DocumentTypeCreateInput!
+    update: DocumentTypeUpdateInput!
+  ): DocumentType!
+  upsertDocument(
+    where: DocumentWhereUniqueInput!
+    create: DocumentCreateInput!
+    update: DocumentUpdateInput!
+  ): Document!
+  updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyProfiles(
+    data: ProfileUpdateInput!
+    where: ProfileWhereInput
+  ): BatchPayload!
+  updateManyDocumentTypes(
+    data: DocumentTypeUpdateInput!
+    where: DocumentTypeWhereInput
+  ): BatchPayload!
+  updateManyDocuments(
+    data: DocumentUpdateInput!
+    where: DocumentWhereInput
+  ): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyProfiles(where: ProfileWhereInput): BatchPayload!
+  deleteManyDocumentTypes(where: DocumentTypeWhereInput): BatchPayload!
+  deleteManyDocuments(where: DocumentWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""
+An object with an ID
+"""
+interface Node {
+  """
+  The id of the object.
+  """
+  id: ID!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  When paginating backwards, the cursor to continue.
+  """
+  startCursor: String
+
+  """
+  When paginating forwards, the cursor to continue.
+  """
+  endCursor: String
+}
+
+type Profile implements Node {
+  id: ID!
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  user(where: UserWhereInput): User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A connection to a list of items.
+"""
+type ProfileConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [ProfileEdge]!
+  aggregate: AggregateProfile!
+}
+
+input ProfileCreateInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  user: UserCreateOneWithoutProfileInput!
+}
+
+input ProfileCreateOneWithoutUserInput {
+  create: ProfileCreateWithoutUserInput
+  connect: ProfileWhereUniqueInput
+}
+
+input ProfileCreateWithoutUserInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+}
+
+"""
+An edge in a connection.
+"""
+type ProfileEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Profile!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum ProfileOrderByInput {
+  id_ASC
+  id_DESC
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
+  dateOfBirth_ASC
+  dateOfBirth_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProfilePreviousValues {
+  id: ID!
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProfileSubscriptionPayload {
+  mutation: MutationType!
+  node: Profile
+  updatedFields: [String!]
+  previousValues: ProfilePreviousValues
+}
+
+input ProfileSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [ProfileSubscriptionWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [ProfileSubscriptionWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [ProfileSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ProfileWhereInput
+}
+
+input ProfileUpdateInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  user: UserUpdateOneWithoutProfileInput
+}
+
+input ProfileUpdateOneWithoutUserInput {
+  create: ProfileCreateWithoutUserInput
+  connect: ProfileWhereUniqueInput
+  delete: Boolean
+  update: ProfileUpdateWithoutUserDataInput
+  upsert: ProfileUpsertWithoutUserInput
+}
+
+input ProfileUpdateWithoutUserDataInput {
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+}
+
+input ProfileUpsertWithoutUserInput {
+  update: ProfileUpdateWithoutUserDataInput!
+  create: ProfileCreateWithoutUserInput!
+}
+
+input ProfileWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [ProfileWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [ProfileWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [ProfileWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  firstName: String
+
+  """
+  All values that are not equal to given value.
+  """
+  firstName_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  firstName_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  firstName_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  firstName_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  firstName_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  firstName_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  firstName_gte: String
+
+  """
+  All values containing the given string.
+  """
+  firstName_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  firstName_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  firstName_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  firstName_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  firstName_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  firstName_not_ends_with: String
+  lastName: String
+
+  """
+  All values that are not equal to given value.
+  """
+  lastName_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  lastName_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  lastName_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  lastName_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  lastName_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  lastName_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  lastName_gte: String
+
+  """
+  All values containing the given string.
+  """
+  lastName_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  lastName_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  lastName_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  lastName_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  lastName_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  lastName_not_ends_with: String
+  dateOfBirth: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  dateOfBirth_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  dateOfBirth_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  dateOfBirth_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  dateOfBirth_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  dateOfBirth_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  dateOfBirth_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  dateOfBirth_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  user: UserWhereInput
+}
+
+input ProfileWhereUniqueInput {
+  id: ID
+}
+
+type Query {
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User]!
+  profiles(
+    where: ProfileWhereInput
+    orderBy: ProfileOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Profile]!
+  documentTypes(
+    where: DocumentTypeWhereInput
+    orderBy: DocumentTypeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [DocumentType]!
+  documents(
+    where: DocumentWhereInput
+    orderBy: DocumentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Document]!
+  user(where: UserWhereUniqueInput!): User
+  profile(where: ProfileWhereUniqueInput!): Profile
+  documentType(where: DocumentTypeWhereUniqueInput!): DocumentType
+  document(where: DocumentWhereUniqueInput!): Document
+  usersConnection(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserConnection!
+  profilesConnection(
+    where: ProfileWhereInput
+    orderBy: ProfileOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ProfileConnection!
+  documentTypesConnection(
+    where: DocumentTypeWhereInput
+    orderBy: DocumentTypeOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): DocumentTypeConnection!
+  documentsConnection(
+    where: DocumentWhereInput
+    orderBy: DocumentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): DocumentConnection!
+
+  """
+  Fetches an object given its ID
+  """
+  node(
+    """
+    The ID of an object
+    """
+    id: ID!
+  ): Node
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+  UNAUTHORIZED
+}
+
+type Subscription {
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  profile(where: ProfileSubscriptionWhereInput): ProfileSubscriptionPayload
+  documentType(
+    where: DocumentTypeSubscriptionWhereInput
+  ): DocumentTypeSubscriptionPayload
+  document(where: DocumentSubscriptionWhereInput): DocumentSubscriptionPayload
+}
+
+type User implements Node {
+  id: ID!
+  email: String!
+  password: String!
+  role: Role!
+  profile(where: ProfileWhereInput): Profile!
+  documents(
+    where: DocumentWhereInput
+    orderBy: DocumentOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Document!]
+  lastLogin: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A connection to a list of items.
+"""
+type UserConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  email: String!
+  password: String!
+  role: Role
+  lastLogin: DateTime
+  profile: ProfileCreateOneWithoutUserInput!
+  documents: DocumentCreateManyWithoutAuthorInput
+}
+
+input UserCreateOneWithoutDocumentsInput {
+  create: UserCreateWithoutDocumentsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutProfileInput {
+  create: UserCreateWithoutProfileInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutDocumentsInput {
+  email: String!
+  password: String!
+  role: Role
+  lastLogin: DateTime
+  profile: ProfileCreateOneWithoutUserInput!
+}
+
+input UserCreateWithoutProfileInput {
+  email: String!
+  password: String!
+  role: Role
+  lastLogin: DateTime
+  documents: DocumentCreateManyWithoutAuthorInput
+}
+
+"""
+An edge in a connection.
+"""
+type UserEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: User!
+
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  role_ASC
+  role_DESC
+  lastLogin_ASC
+  lastLogin_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  email: String!
+  password: String!
+  role: Role!
+  lastLogin: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserSubscriptionWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserSubscriptionWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [UserSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+}
+
+input UserUpdateInput {
+  email: String
+  password: String
+  role: Role
+  lastLogin: DateTime
+  profile: ProfileUpdateOneWithoutUserInput
+  documents: DocumentUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateOneWithoutDocumentsInput {
+  create: UserCreateWithoutDocumentsInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutDocumentsDataInput
+  upsert: UserUpsertWithoutDocumentsInput
+}
+
+input UserUpdateOneWithoutProfileInput {
+  create: UserCreateWithoutProfileInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutProfileDataInput
+  upsert: UserUpsertWithoutProfileInput
+}
+
+input UserUpdateWithoutDocumentsDataInput {
+  email: String
+  password: String
+  role: Role
+  lastLogin: DateTime
+  profile: ProfileUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutProfileDataInput {
+  email: String
+  password: String
+  role: Role
+  lastLogin: DateTime
+  documents: DocumentUpdateManyWithoutAuthorInput
+}
+
+input UserUpsertWithoutDocumentsInput {
+  update: UserUpdateWithoutDocumentsDataInput!
+  create: UserCreateWithoutDocumentsInput!
+}
+
+input UserUpsertWithoutProfileInput {
+  update: UserUpdateWithoutProfileDataInput!
+  create: UserCreateWithoutProfileInput!
+}
+
+input UserWhereInput {
+  """
+  Logical AND on all given filters.
+  """
+  AND: [UserWhereInput!]
+
+  """
+  Logical OR on all given filters.
+  """
+  OR: [UserWhereInput!]
+
+  """
+  Logical NOT on all given filters combined by AND.
+  """
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """
+  All values that are not equal to given value.
+  """
+  id_not: ID
+
+  """
+  All values that are contained in given list.
+  """
+  id_in: [ID!]
+
+  """
+  All values that are not contained in given list.
+  """
+  id_not_in: [ID!]
+
+  """
+  All values less than the given value.
+  """
+  id_lt: ID
+
+  """
+  All values less than or equal the given value.
+  """
+  id_lte: ID
+
+  """
+  All values greater than the given value.
+  """
+  id_gt: ID
+
+  """
+  All values greater than or equal the given value.
+  """
+  id_gte: ID
+
+  """
+  All values containing the given string.
+  """
+  id_contains: ID
+
+  """
+  All values not containing the given string.
+  """
+  id_not_contains: ID
+
+  """
+  All values starting with the given string.
+  """
+  id_starts_with: ID
+
+  """
+  All values not starting with the given string.
+  """
+  id_not_starts_with: ID
+
+  """
+  All values ending with the given string.
+  """
+  id_ends_with: ID
+
+  """
+  All values not ending with the given string.
+  """
+  id_not_ends_with: ID
+  email: String
+
+  """
+  All values that are not equal to given value.
+  """
+  email_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  email_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  email_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  email_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  email_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  email_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  email_gte: String
+
+  """
+  All values containing the given string.
+  """
+  email_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  email_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  email_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  email_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  email_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  email_not_ends_with: String
+  password: String
+
+  """
+  All values that are not equal to given value.
+  """
+  password_not: String
+
+  """
+  All values that are contained in given list.
+  """
+  password_in: [String!]
+
+  """
+  All values that are not contained in given list.
+  """
+  password_not_in: [String!]
+
+  """
+  All values less than the given value.
+  """
+  password_lt: String
+
+  """
+  All values less than or equal the given value.
+  """
+  password_lte: String
+
+  """
+  All values greater than the given value.
+  """
+  password_gt: String
+
+  """
+  All values greater than or equal the given value.
+  """
+  password_gte: String
+
+  """
+  All values containing the given string.
+  """
+  password_contains: String
+
+  """
+  All values not containing the given string.
+  """
+  password_not_contains: String
+
+  """
+  All values starting with the given string.
+  """
+  password_starts_with: String
+
+  """
+  All values not starting with the given string.
+  """
+  password_not_starts_with: String
+
+  """
+  All values ending with the given string.
+  """
+  password_ends_with: String
+
+  """
+  All values not ending with the given string.
+  """
+  password_not_ends_with: String
+  role: Role
+
+  """
+  All values that are not equal to given value.
+  """
+  role_not: Role
+
+  """
+  All values that are contained in given list.
+  """
+  role_in: [Role!]
+
+  """
+  All values that are not contained in given list.
+  """
+  role_not_in: [Role!]
+  lastLogin: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  lastLogin_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  lastLogin_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  lastLogin_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  lastLogin_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  lastLogin_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  lastLogin_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  lastLogin_gte: DateTime
+  createdAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  createdAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  createdAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  createdAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  createdAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  createdAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  createdAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """
+  All values that are not equal to given value.
+  """
+  updatedAt_not: DateTime
+
+  """
+  All values that are contained in given list.
+  """
+  updatedAt_in: [DateTime!]
+
+  """
+  All values that are not contained in given list.
+  """
+  updatedAt_not_in: [DateTime!]
+
+  """
+  All values less than the given value.
+  """
+  updatedAt_lt: DateTime
+
+  """
+  All values less than or equal the given value.
+  """
+  updatedAt_lte: DateTime
+
+  """
+  All values greater than the given value.
+  """
+  updatedAt_gt: DateTime
+
+  """
+  All values greater than or equal the given value.
+  """
+  updatedAt_gte: DateTime
+  profile: ProfileWhereInput
+  documents_every: DocumentWhereInput
+  documents_some: DocumentWhereInput
+  documents_none: DocumentWhereInput
+}
+
+input UserWhereUniqueInput {
+  id: ID
+  email: String
+}

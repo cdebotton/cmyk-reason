@@ -1,0 +1,8 @@
+{
+  "ext": "ts,tsx,js,re",
+  "watch": ["app", "server", "lib/js/app"],
+  "execMap": {
+    "ts": "ts-node",
+    "tsx": "ts-node"
+  }
+}
