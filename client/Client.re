@@ -1,5 +1,15 @@
+[@bs.val]
+external apolloState : ApolloInMemoryCache.inMemoryCacheRestoreData =
+  "window.__APOLLO_STATE__";
+
+let link = ApolloLinks.createHttpLink(~uri="/graphql", ());
+let cache =
+  ApolloInMemoryCache.(createInMemoryCache() |> restore(apolloState));
+
+let client = ReasonApollo.createApolloClient(~link, ~cache, ());
+
 ReactDOMRe.hydrateToElementWithId(
-  <ApolloProvider client=ApolloClient.instance>
+  <ApolloProvider client>
     <Router.Browser> <App /> </Router.Browser>
   </ApolloProvider>,
   "app",
