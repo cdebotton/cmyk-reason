@@ -31,18 +31,6 @@ module Browser = {
   };
 };
 
-module Server = {
-  let component = ReasonReact.statelessComponent("ServerRouter");
-
-  let make = (~pathname, children) => {
-    ...component,
-    render: _self =>
-      <RouterContext.Provider value={path: pathname, hash: "", search: ""}>
-        ...children
-      </RouterContext.Provider>,
-  };
-};
-
 let getPath = pathname =>
   switch (pathname) {
   | ""
@@ -56,6 +44,18 @@ let getPath = pathname =>
       };
     raw |> Js.String.split("/") |> Utils.arrayToList;
   };
+
+module Server = {
+  let component = ReasonReact.statelessComponent("ServerRouter");
+
+  let make = (~pathname, children) => {
+    ...component,
+    render: _self =>
+      <RouterContext.Provider value={path: pathname, hash: "", search: ""}>
+        ...children
+      </RouterContext.Provider>,
+  };
+};
 
 let staticRouterJs =
   ReasonReact.wrapReasonForJs(

@@ -13,7 +13,7 @@ import render from './middleware/render';
 // @ts-ignore
 import ServerApp from '../lib/js/app/ServerApp.bs.js';
 // @ts-ignore
-import { staticRouterJs as StaticRouter } from '../lib/js/app/Router.bs.js';
+import { staticRouterJs as StaticRouter } from '../lib/js/app/containers/Router.bs.js';
 import schema from './api/schema';
 
 const { PORT = '3000' } = process.env;

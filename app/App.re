@@ -21,6 +21,7 @@ let make = _children => {
           ...(
                route =>
                  switch (route.path) {
+                 | ["admin", ..._rest] => <Admin />
                  | [] => <p> ("Home" |> ReasonReact.string) </p>
                  | _ => <p> ("Not found..." |> ReasonReact.string) </p>
                  }
