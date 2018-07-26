@@ -5,20 +5,27 @@ Css.(
   )
 );
 
+module Styles = {
+  open Css;
+  let main = style([gridTemplateColumns([auto, minContent, maxContent])]);
+};
+
 let component = ReasonReact.statelessComponent("App");
 
 let make = _children => {
   ...component,
   render: _self =>
     <StrictMode>
-      <Router.Consumer>
-        ...(
-             route =>
-               switch (route.path) {
-               | [] => <p> ("Home" |> ReasonReact.string) </p>
-               | _ => <p> ("Not found..." |> ReasonReact.string) </p>
-               }
-           )
-      </Router.Consumer>
+      <div className=Styles.main>
+        <Router.Consumer>
+          ...(
+               route =>
+                 switch (route.path) {
+                 | [] => <p> ("Home" |> ReasonReact.string) </p>
+                 | _ => <p> ("Not found..." |> ReasonReact.string) </p>
+                 }
+             )
+        </Router.Consumer>
+      </div>
     </StrictMode>,
 };
