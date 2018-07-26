@@ -1,4 +1,46 @@
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+  UNAUTHORIZED
+}
+
 type User {
   id: ID! @unique
-  name: String!
+  email: String! @unique
+  password: String!
+  role: Role! @default(value: USER)
+  profile: Profile! @relation(name: "UserProfile", onDelete: CASCADE)
+  documents: [Document!]! @relation(name: "UserDocuments", onDelete: SET_NULL)
+  lastLogin: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Profile {
+  id: ID! @unique
+  firstName: String
+  lastName: String
+  dateOfBirth: DateTime
+  user: User! @relation(name: "UserProfile")
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DocumentType {
+  id: ID! @unique
+  title: String!
+  documents: [Document!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Document {
+  id: ID! @unique
+  publishDate: DateTime!
+  title: String!
+  type: DocumentType!
+  author: User @relation(name: "UserDocuments")
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

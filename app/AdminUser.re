@@ -50,6 +50,9 @@ let make = (~userId, _children) => {
                        ...(
                             ({onChange, getValue}) =>
                               <form>
+                                <label>
+                                  ("Email" |> ReasonReact.string)
+                                </label>
                                 <input
                                   value=(getValue(FormConfig.Email))
                                   onChange=(
