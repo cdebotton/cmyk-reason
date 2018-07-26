@@ -1,7 +1,7 @@
 import { renderToNodeStream } from 'react-dom/server';
 import { Context } from 'koa';
+// @ts-ignore
 import { renderStatic } from 'glamor/server';
-
 type Renderer = (ctx: Context) => Promise<[JSX.Element, string]>;
 
 function render(render: Renderer) {
