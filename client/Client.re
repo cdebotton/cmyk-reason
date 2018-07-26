@@ -14,3 +14,5 @@ ReactDOMRe.hydrateToElementWithId(
   </ApolloProvider>,
   "app",
 );
+
+[%bs.raw {| module.hot && module.hot.accept() |}];

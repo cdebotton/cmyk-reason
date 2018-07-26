@@ -19,8 +19,7 @@ let make = _children => {
                | ["admin"] => <p> ("Dashboard" |> ReasonReact.string) </p>
                | ["admin", "documents"] =>
                  <p> ("Docs" |> ReasonReact.string) </p>
-               | ["admin", "users"] =>
-                 <p> ("People" |> ReasonReact.string) </p>
+               | ["admin", "users", ..._rest] => <AdminUsers />
                | _ => <NotFound />
                }
            )

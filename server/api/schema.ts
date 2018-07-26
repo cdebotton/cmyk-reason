@@ -11,6 +11,10 @@ interface Context {
 const resolvers: IResolvers<{}, Context> = {
   Query: {
     users: (_parent, _args, context, info) => context.db.query.users({}, info),
+    user: (_parent, args, context, info) => {
+      console.log(args);
+      return context.db.query.user(args, info);
+    },
   },
 };
 

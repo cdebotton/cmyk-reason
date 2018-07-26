@@ -1,6 +1,8 @@
 # import User from "./prisma.graphql"
 # import UserWhereInput from "./prisma.graphql"
+# import UserWhereUniqueInput from "./prisma.graphql"
 
 type Query {
   users(where: UserWhereInput): [User!]!
+  user(where: UserWhereUniqueInput!): User!
 }

@@ -3,7 +3,6 @@ module type Configuration = {
   type key;
   type value;
   let debugName: string;
-  let initialValues: t;
   let get: (key, t) => value;
   let set: ((key, value), t) => t;
 };
@@ -24,19 +23,17 @@ module Make = (Form: Configuration) => {
 
   let component = ReasonReact.reducerComponent(Form.debugName);
 
-  let make = children => {
-    let pristineState = ref(Form.initialValues);
+  let make = (~initialValues, children) => {
+    let pristineState = ref(initialValues);
 
     {
       ...component,
-      initialState: () => {data: Form.initialValues, dirty: false},
+      initialState: () => {data: initialValues, dirty: false},
       reducer: (action, state) =>
         switch (action) {
         | Change((key, value)) =>
-          ReasonReact.Update({
-            dirty: true,
-            data: state.data |> Form.set((key, value)),
-          })
+          let data = state.data |> Form.set((key, value));
+          ReasonReact.Update({dirty: true, data});
         | Reset => ReasonReact.Update({data: pristineState^, dirty: false})
         | Submit =>
           pristineState := state.data;
