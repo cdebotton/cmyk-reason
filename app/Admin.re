@@ -21,7 +21,7 @@ let make = _children => {
                  <p> ("Docs" |> ReasonReact.string) </p>
                | ["admin", "users"] =>
                  <p> ("People" |> ReasonReact.string) </p>
-               | _ => <p> ("Uh oh" |> ReasonReact.string) </p>
+               | _ => <NotFound />
                }
            )
       </Router.Consumer>

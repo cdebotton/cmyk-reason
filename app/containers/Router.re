@@ -1,22 +1,53 @@
-module RouterContext =
-  ReactContext.Make({
-    type t = ReasonReact.Router.url;
-    let debugName = "RouterContext";
-    let initialValue = ReasonReact.Router.dangerouslyGetInitialUrl();
-  });
+type staticContext = {
+  mutable statusCode: int,
+  mutable url: option(string),
+};
+
+let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+
+type router = {
+  path: list(string),
+  hash: string,
+  search: string,
+  staticContext: option(staticContext),
+};
+
+module RouterConfig = {
+  type t = router;
+  let debugName = "RouterContext";
+  let value = {
+    path: url.path,
+    search: url.search,
+    hash: url.hash,
+    staticContext: None,
+  };
+};
+
+module RouterContext = ReactContext.Make(RouterConfig);
 
 module Browser = {
-  type state = ReasonReact.Router.url;
+  type state = router;
   type action =
     | Push(ReasonReact.Router.url);
 
   let component = ReasonReact.reducerComponent("BrowserRouter");
   let make = children => {
     ...component,
-    initialState: () => ReasonReact.Router.dangerouslyGetInitialUrl(),
-    reducer: (action, _state) =>
+    initialState: () => {
+      path: url.path,
+      hash: url.hash,
+      search: url.search,
+      staticContext: None,
+    },
+    reducer: (action, state) =>
       switch (action) {
-      | Push(url) => ReasonReact.Update(url)
+      | Push(url) =>
+        ReasonReact.Update({
+          ...state,
+          path: url.path,
+          hash: url.hash,
+          search: url.search,
+        })
       },
     subscriptions: ({send}) => [
       ReasonReact.Sub(
@@ -48,10 +79,16 @@ let getPath = pathname =>
 module Server = {
   let component = ReasonReact.statelessComponent("ServerRouter");
 
-  let make = (~pathname, children) => {
+  let make = (~pathname, ~staticContext, children) => {
     ...component,
     render: _self =>
-      <RouterContext.Provider value={path: pathname, hash: "", search: ""}>
+      <RouterContext.Provider
+        value={
+          path: pathname,
+          hash: "",
+          search: "",
+          staticContext: Some(staticContext),
+        }>
         ...children
       </RouterContext.Provider>,
   };
@@ -62,7 +99,11 @@ let staticRouterJs =
     ~component=Server.component,
     jsProps => {
       let pathname = jsProps##pathname |> getPath;
-      Server.make(~pathname, jsProps##children);
+      Server.make(
+        ~pathname,
+        ~staticContext=jsProps##context,
+        jsProps##children,
+      );
     },
   );
 

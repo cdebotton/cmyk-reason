@@ -56,18 +56,20 @@ app.use(
 
     const cache = new InMemoryCache();
     const client = new ApolloClient({ link, cache });
+    const context: any = {};
     const app = (
       <ApolloProvider client={client}>
-        <StaticRouter pathname={ctx.req.url}>
+        <StaticRouter pathname={ctx.req.url} context={context}>
           <ServerApp />
         </StaticRouter>
       </ApolloProvider>
     );
 
     await getDataFromTree(app);
+    const [statusCode, redirect] = context;
     const state = JSON.stringify(client.extract());
 
-    return [app, state];
+    return [app, state, statusCode, redirect];
   }),
 );
 

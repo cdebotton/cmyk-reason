@@ -2,15 +2,17 @@ import { renderToNodeStream } from 'react-dom/server';
 import { Context } from 'koa';
 // @ts-ignore
 import { renderStatic } from 'glamor/server';
-type Renderer = (ctx: Context) => Promise<[JSX.Element, string]>;
+type Renderer = (
+  ctx: Context,
+) => Promise<[JSX.Element, string, number, string | undefined]>;
 
 function render(render: Renderer) {
   return async (ctx: Context) => {
-    const [app, state] = await render(ctx);
+    const [app, state, statusCode = 200, redirect] = await render(ctx);
     const { html, css } = renderStatic(() => renderToNodeStream(app));
 
     ctx.respond = false;
-    ctx.status = 200;
+    ctx.status = statusCode;
     ctx.res.write(
       '<!doctype html>' +
         '<html lang="en">' +
