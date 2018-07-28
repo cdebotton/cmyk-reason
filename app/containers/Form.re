@@ -7,6 +7,13 @@ module type Configuration = {
   let set: ((key, value), t) => t;
 };
 
+let valueFromEvent = event => {
+  let domObject =
+    event |> ReactEventRe.Form.target |> ReactDOMRe.domElementToObj;
+
+  domObject##value;
+};
+
 module Make = (Form: Configuration) => {
   type state = {
     data: Form.t,

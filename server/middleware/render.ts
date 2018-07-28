@@ -11,6 +11,11 @@ function render(render: Renderer) {
     const [app, state, statusCode = 200, redirect] = await render(ctx);
     const { html, css } = renderStatic(() => renderToNodeStream(app));
 
+    if (redirect) {
+      ctx.redirect(redirect);
+      return;
+    }
+
     ctx.respond = false;
     ctx.status = statusCode;
     ctx.res.write(

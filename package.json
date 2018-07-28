@@ -46,6 +46,8 @@
     "react": "^16.4.1",
     "react-apollo": "^2.1.9",
     "react-dom": "^16.4.1",
+    "react-pose": "^2.2.0",
+    "react-universal-component": "3.0.0",
     "reason-apollo": "cdebotton/reason-apollo#add-reset-store",
     "reason-react": "^0.4.2",
     "subscriptions-transport-ws": "^0.9.13"

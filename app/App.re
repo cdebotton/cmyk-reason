@@ -7,7 +7,13 @@ Css.(
 
 module Styles = {
   open Css;
-  let main = style([gridTemplateColumns([auto, minContent, maxContent])]);
+  let main =
+    style([
+      gridTemplateColumns([auto, minContent, maxContent]),
+      width(100. |. vw),
+      minHeight(100. |. vh),
+      overflow(auto),
+    ]);
 };
 
 let component = ReasonReact.statelessComponent("App");
@@ -16,17 +22,16 @@ let make = _children => {
   ...component,
   render: _self =>
     <StrictMode>
-      <div className=Styles.main>
-        <Router.Consumer>
-          ...(
-               route =>
-                 switch (route.path) {
-                 | ["admin", ..._rest] => <Admin />
-                 | [] => <p> ("Home" |> ReasonReact.string) </p>
-                 | _ => <NotFound />
-                 }
-             )
-        </Router.Consumer>
-      </div>
+      <Router.Consumer key="Router">
+        ...(
+             route =>
+               switch (route.path) {
+               | ["admin", ..._rest] => <Admin />
+               | ["login"] => <Login />
+               | [] => <p> ("Home" |> ReasonReact.string) </p>
+               | _ => <NotFound />
+               }
+           )
+      </Router.Consumer>
     </StrictMode>,
 };

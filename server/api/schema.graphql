@@ -2,7 +2,13 @@
 # import UserWhereInput from "./prisma.graphql"
 # import UserWhereUniqueInput from "./prisma.graphql"
 
+type Session {
+  token: String!
+  user: User!
+}
+
 type Query {
   users(where: UserWhereInput): [User!]!
   user(where: UserWhereUniqueInput!): User!
+  session: Session
 }

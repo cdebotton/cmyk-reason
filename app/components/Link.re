@@ -13,10 +13,10 @@ module Styles = {
   let main = active => style([textDecoration(none), getColor(active)]);
 };
 
-let rec getActiveState = ((path, href), ~exact, ~match=true, ()) =>
+let rec matchPartialPath = ((path, href), ~exact, ~match=true, ()) =>
   switch (path, href, exact, match) {
   | ([a, ...path], [b, ...href], _, true) when a === b =>
-    getActiveState((path, href), ~exact, ~match=true, ())
+    matchPartialPath((path, href), ~exact, ~match=true, ())
   | (_, [], false, true) => true
   | ([], [], true, true) => true
   | (_, _, _, _) => false
@@ -35,7 +35,7 @@ let make = (~href, ~exact=false, children) => {
         ...(
              route => {
                let active =
-                 getActiveState(
+                 matchPartialPath(
                    (route.path, href |> Router.getPath),
                    ~exact,
                    (),
