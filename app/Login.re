@@ -1,6 +1,3 @@
-[@bs.send]
-external resetStore : (ApolloClient.generatedApolloClient, unit) => unit = "";
-
 module Authenticate = [%graphql
   {|
   mutation Authenticate($input: AuthenticateInput!) {
@@ -67,6 +64,25 @@ module Styles = {
 
 let component = ReasonReact.statelessComponent("Login");
 
+[@bs.send]
+external resetStore : (ApolloClient.generatedApolloClient, unit) => unit = "";
+
+let onSubmit =
+    (
+      mutate: AuthenticateMutation.apolloMutation,
+      apolloClient: ApolloClient.generatedApolloClient,
+      {email, password}: LoginConfig.t,
+    ) => {
+  let authenticate =
+    Authenticate.make(~input={"email": email, "password": password}, ());
+
+  Js.Promise.(
+    mutate(~variables=authenticate##variables, ())
+    |> then_(_data => apolloClient |. resetStore |> resolve)
+    |> ignore
+  );
+};
+
 let make = _children => {
   ...component,
   render: _self =>
@@ -79,26 +95,7 @@ let make = _children => {
                       (mutate, _renderPropObj) =>
                         <LoginForm
                           initialValues={email: "", password: ""}
-                          onSubmit=(
-                            ({email, password}) => {
-                              let authenticate =
-                                Authenticate.make(
-                                  ~input={
-                                    "email": email,
-                                    "password": password,
-                                  },
-                                  (),
-                                );
-
-                              Js.Promise.(
-                                mutate(~variables=authenticate##variables, ())
-                                |> then_(_data =>
-                                     apolloClient |. resetStore |> resolve
-                                   )
-                                |> ignore
-                              );
-                            }
-                          )>
+                          onSubmit=(onSubmit(mutate, apolloClient))>
                           ...(
                                ({getValue, onChange, handleSubmit}) =>
                                  <form
