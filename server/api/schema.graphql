@@ -12,3 +12,12 @@ type Query {
   user(where: UserWhereUniqueInput!): User!
   session: Session
 }
+
+input AuthenticateInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  authenticate(input: AuthenticateInput!): Session
+}

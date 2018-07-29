@@ -1,18 +1,44 @@
 module Styles = {
   open Css;
 
+  let colors = Colors.neutral |> Utils.joinList;
+
+  let main =
+    style([
+      position(relative),
+      display(inlineBlock),
+      before([
+        `declaration(("content", " ")),
+        position(absolute),
+        display(block),
+        top(100. |. pct),
+        width(100. |. pct),
+        height(2 |. px),
+        `declaration((
+          "backgroundImage",
+          {j|linear-gradient(to right, $colors)|j},
+        )),
+      ]),
+    ]);
+
   let label =
     style([
       position(absolute),
       pointerEvents(none),
       userSelect(none),
-      fontSize(0.8 |. rem),
+      fontSize(0.6 |. rem),
+      fontWeight(600),
+      textTransform(uppercase),
+      left(0.75 |. rem),
+      opacity(0.),
     ]);
+
   let input =
     style([
-      borderBottom(1 |> px, solid, black),
+      fontSize(1. |. rem),
+      padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
       border(0 |. px, none, transparent),
-      selector(":focus", [outline(0 |. px, none, transparent)]),
+      focus([outline(0 |. px, none, transparent)]),
     ]);
 };
 
@@ -45,12 +71,14 @@ module LabelPoseConfig = {
   type t = {
     visible: state,
     hidden: state,
+    initialPose: string,
   };
 
   let config =
     t(
-      ~visible=state(~opacity=1., ~y=-20.),
+      ~visible=state(~opacity=1., ~y=-10.),
       ~hidden=state(~opacity=0., ~y=0.),
+      ~initialPose="hidden",
     );
 
   let element = Pose.Label;
@@ -79,7 +107,12 @@ let make =
     ) => {
   ...component,
   render: _self =>
-    <span ?className>
+    <span
+      className=(
+        [Some(Styles.main), className]
+        |> Utils.unwrapOptionalList
+        |> Utils.joinList(~sep=" ")
+      )>
       <Label
         className=Styles.label
         pose=(

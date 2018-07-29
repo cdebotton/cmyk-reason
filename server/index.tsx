@@ -1,5 +1,8 @@
 import React from 'react';
 import Koa, { Context } from 'koa';
+import mount from 'koa-mount';
+import serveStatic from 'koa-static';
+import compress from 'koa-compress';
 import https from 'https';
 import path from 'path';
 import fs from 'fs';
@@ -16,7 +19,7 @@ import ServerApp from '../lib/js/app/ServerApp.bs.js';
 import { staticRouterJs as StaticRouter } from '../lib/js/app/containers/Router.bs.js';
 import schema from './api/schema';
 
-const { PORT = '3000' } = process.env;
+const { PORT = '3000', NODE_ENV = 'development' } = process.env;
 
 const app = new Koa();
 const db = new Prisma({
@@ -44,6 +47,12 @@ const server = https.createServer(
 // @ts-ignore
 apollo.applyMiddleware({ app });
 
+app.use(compress());
+
+if (NODE_ENV !== 'development') {
+  app.use(mount('/dist', serveStatic(path.join(process.cwd(), 'dist/client'))));
+}
+
 app.use(
   render(async ctx => {
     const link = new SchemaLink({
@@ -56,7 +65,11 @@ app.use(
 
     const cache = new InMemoryCache();
     const client = new ApolloClient({ link, cache });
-    const context: any = {};
+    const context = {
+      url: undefined,
+      statusCode: 200,
+    };
+
     const app = (
       <ApolloProvider client={client}>
         <StaticRouter pathname={ctx.req.url} context={context}>
@@ -66,10 +79,11 @@ app.use(
     );
 
     await getDataFromTree(app);
-    const [statusCode, redirect] = context;
+
+    const { statusCode, url } = context;
     const state = JSON.stringify(client.extract());
 
-    return [app, state, statusCode, redirect];
+    return [app, state, statusCode, url];
   }),
 );
 
@@ -77,6 +91,6 @@ server.listen(PORT, () => {
   process.stdout.write(`🚀 Running on port ${PORT}\n`);
 });
 
-if (process.env.NODE_ENV === 'development') {
+if (NODE_ENV === 'development') {
   app.listen(4000);
 }

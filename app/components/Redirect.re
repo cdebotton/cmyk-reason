@@ -9,7 +9,7 @@ let make = (~to_, _children) => {
            ({staticContext}) => {
              switch (staticContext) {
              | None => ignore()
-             | Some(context) => context.url = Some(to_)
+             | Some(context) => context |. Router.urlSet(Some(to_))
              };
              ReasonReact.null;
            }

@@ -1,3 +1,4 @@
+[@bs.deriving abstract]
 type staticContext = {
   mutable statusCode: int,
   mutable url: option(string),

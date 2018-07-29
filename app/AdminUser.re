@@ -28,6 +28,8 @@ module FormConfig = {
 };
 module UserForm = Form.Make(FormConfig);
 
+let onSubmit = values => Js.log(values);
+
 let component = ReasonReact.statelessComponent("AdminUser");
 
 let make = (~userId, _children) => {
@@ -46,7 +48,8 @@ let make = (~userId, _children) => {
                  | Data(response) =>
                    <div>
                      <p> (response##user##id |> ReasonReact.string) </p>
-                     <UserForm initialValues={email: response##user##email}>
+                     <UserForm
+                       initialValues={email: response##user##email} onSubmit>
                        ...(
                             ({onChange, getValue}) =>
                               <form>

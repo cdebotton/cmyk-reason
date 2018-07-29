@@ -27,16 +27,13 @@ module Make = (C: Config) => {
     | Label => pose |. label(C.config)
     };
 
-  let make = (~pose, ~className=?, ~initialPose=?, children) => {
-    Js.log(pose |> C.get);
+  let make = (~pose, ~className=?, children) =>
     ReasonReact.wrapJsForReason(
       ~reactClass,
       ~props={
         "pose": pose |> C.get,
-        "initialPose": Js.Undefined.fromOption(initialPose),
         "className": Js.Undefined.fromOption(className),
       },
       children,
     );
-  };
 };

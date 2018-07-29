@@ -8,8 +8,8 @@ let make = (~code, children) => {
            route =>
              switch (route.staticContext) {
              | None => children
-             | Some(staticContext) =>
-               staticContext.statusCode = code;
+             | Some(context) =>
+               context |. Router.statusCodeSet(code);
                children;
              }
          )

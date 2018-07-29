@@ -26,11 +26,12 @@ module Make = (Form: Configuration) => {
   type interface = {
     getValue: Form.key => Form.value,
     onChange: (Form.key, Form.value) => unit,
+    handleSubmit: ReactEventRe.Form.t => unit,
   };
 
   let component = ReasonReact.reducerComponent(Form.debugName);
 
-  let make = (~initialValues, children) => {
+  let make = (~initialValues, ~onSubmit, children) => {
     let pristineState = ref(initialValues);
 
     {
@@ -49,8 +50,12 @@ module Make = (Form: Configuration) => {
       render: ({send, state}) => {
         let onChange = (key, value) => Change((key, value)) |> send;
         let getValue = key => state.data |> Form.get(key);
+        let handleSubmit = event => {
+          event |> ReactEventRe.Form.preventDefault;
+          onSubmit(state.data);
+        };
 
-        children({onChange, getValue});
+        children({onChange, getValue, handleSubmit});
       },
     };
   };

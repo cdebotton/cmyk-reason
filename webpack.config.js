@@ -7,7 +7,7 @@ module.exports = {
   entry: path.join(__dirname, 'lib', 'es6', 'client', 'Client.bs.js'),
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'dist/client'),
     publicPath: 'http://localhost:8080/',
   },
 };
