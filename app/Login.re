@@ -1,9 +1,7 @@
 module Authenticate = [%graphql
   {|
   mutation Authenticate($input: AuthenticateInput!) {
-    authenticate(input: $input) {
-      token
-    }
+    authenticate(input: $input)
   }
   |}
 ];

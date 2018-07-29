@@ -19,5 +19,5 @@ input AuthenticateInput {
 }
 
 type Mutation {
-  authenticate(input: AuthenticateInput!): Session
+  authenticate(input: AuthenticateInput!): String
 }

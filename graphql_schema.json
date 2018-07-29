@@ -4113,8 +4113,8 @@
                 }
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Session",
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
