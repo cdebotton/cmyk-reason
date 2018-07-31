@@ -108,10 +108,11 @@ let onSubmit =
 
 let component = ReasonReact.statelessComponent("Login");
 
-let make = _children => {
-  ...component,
-  render: _self =>
-    <div className=Styles.page>
+module LoginContainer = {
+  let component = ReasonReact.statelessComponent("LoginContainer");
+  let make = children => {
+    ...component,
+    render: _self =>
       <SessionQuery>
         ...(
              ({result}) =>
@@ -127,65 +128,67 @@ let make = _children => {
                           <AuthenticateMutation>
                             ...(
                                  (mutate, _renderPropObj) =>
-                                   <LoginForm
-                                     initialValues={email: "", password: ""}
-                                     onSubmit=(onSubmit(mutate, apolloClient))>
-                                     ...(
-                                          ({getValue, onChange, handleSubmit}) =>
-                                            <form
-                                              className=Styles.form
-                                              onSubmit=handleSubmit>
-                                              <Heading
-                                                className=Styles.title level=2>
-                                                ("Login" |> ReasonReact.string)
-                                              </Heading>
-                                              <Input
-                                                className=Styles.inputEmail
-                                                placeholder="Email"
-                                                value=(getValue(Email))
-                                                onChange=(
-                                                  event =>
-                                                    event
-                                                    |> Form.valueFromEvent
-                                                    |> (
-                                                      value =>
-                                                        value
-                                                        |> onChange(Email)
-                                                    )
-                                                )
-                                              />
-                                              <Input
-                                                className=Styles.inputPassword
-                                                placeholder="Password"
-                                                type_=Password
-                                                value=(getValue(Password))
-                                                name="password"
-                                                onChange=(
-                                                  event =>
-                                                    event
-                                                    |> Form.valueFromEvent
-                                                    |> (
-                                                      value =>
-                                                        value
-                                                        |> onChange(Password)
-                                                    )
-                                                )
-                                              />
-                                              <Button
-                                                format=Neutral
-                                                className=Styles.loginButton
-                                                type_=Submit>
-                                                ("Login" |> ReasonReact.string)
-                                              </Button>
-                                            </form>
-                                        )
-                                   </LoginForm>
+                                   children(mutate, apolloClient)
                                )
                           </AuthenticateMutation>
                       )
                  </ApolloConsumer>
                }
            )
-      </SessionQuery>
+      </SessionQuery>,
+  };
+};
+
+let make = _children => {
+  ...component,
+  render: _self =>
+    <div className=Styles.page>
+      <LoginContainer>
+        ...(
+             (mutate, apolloClient) =>
+               <LoginForm
+                 initialValues={email: "", password: ""}
+                 onSubmit=(onSubmit(mutate, apolloClient))>
+                 ...(
+                      ({getValue, onChange, handleSubmit}) =>
+                        <form className=Styles.form onSubmit=handleSubmit>
+                          <Heading className=Styles.title level=2>
+                            ("Login" |> ReasonReact.string)
+                          </Heading>
+                          <Input
+                            className=Styles.inputEmail
+                            placeholder="Email"
+                            value=(getValue(Email))
+                            onChange=(
+                              event =>
+                                event
+                                |> Form.valueFromEvent
+                                |> (value => value |> onChange(Email))
+                            )
+                          />
+                          <Input
+                            className=Styles.inputPassword
+                            placeholder="Password"
+                            type_=Password
+                            value=(getValue(Password))
+                            name="password"
+                            onChange=(
+                              event =>
+                                event
+                                |> Form.valueFromEvent
+                                |> (value => value |> onChange(Password))
+                            )
+                          />
+                          <Button
+                            format=Neutral
+                            className=Styles.loginButton
+                            type_=Submit>
+                            ("Login" |> ReasonReact.string)
+                          </Button>
+                        </form>
+                    )
+               </LoginForm>
+           )
+      </LoginContainer>
     </div>,
 };
