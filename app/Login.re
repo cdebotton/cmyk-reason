@@ -33,6 +33,18 @@ module Styles = {
 /**
  * 🚀 GraphQL 🚀
  */
+module Session = [%graphql
+  {|
+  query Session {
+    session {
+      token
+    }
+  }
+  |}
+];
+
+module SessionQuery = ReasonApollo.CreateQuery(Session);
+
 module Authenticate = [%graphql
   {|
   mutation Authenticate($input: AuthenticateInput!) {
@@ -100,63 +112,80 @@ let make = _children => {
   ...component,
   render: _self =>
     <div className=Styles.page>
-      <ApolloConsumer>
+      <SessionQuery>
         ...(
-             apolloClient =>
-               <AuthenticateMutation>
-                 ...(
-                      (mutate, _renderPropObj) =>
-                        <LoginForm
-                          initialValues={email: "", password: ""}
-                          onSubmit=(onSubmit(mutate, apolloClient))>
-                          ...(
-                               ({getValue, onChange, handleSubmit}) =>
-                                 <form
-                                   className=Styles.form onSubmit=handleSubmit>
-                                   <Heading className=Styles.title level=2>
-                                     ("Login" |> ReasonReact.string)
-                                   </Heading>
-                                   <Input
-                                     className=Styles.inputEmail
-                                     placeholder="Email"
-                                     value=(getValue(Email))
-                                     onChange=(
-                                       event =>
-                                         event
-                                         |> Form.valueFromEvent
-                                         |> (
-                                           value => value |> onChange(Email)
-                                         )
-                                     )
-                                   />
-                                   <Input
-                                     className=Styles.inputPassword
-                                     placeholder="Password"
-                                     type_=Password
-                                     value=(getValue(Password))
-                                     name="password"
-                                     onChange=(
-                                       event =>
-                                         event
-                                         |> Form.valueFromEvent
-                                         |> (
-                                           value =>
-                                             value |> onChange(Password)
-                                         )
-                                     )
-                                   />
-                                   <Button
-                                     format=Neutral
-                                     className=Styles.loginButton
-                                     type_=Submit>
-                                     ("Login" |> ReasonReact.string)
-                                   </Button>
-                                 </form>
-                             )
-                        </LoginForm>
-                    )
-               </AuthenticateMutation>
+             ({result}) =>
+               switch (result) {
+               | Loading => ReasonReact.null
+               | Error(_err) => ReasonReact.null
+               | Data(response) when response##session !== None =>
+                 <Redirect to_="/admin" />
+               | Data(_response) =>
+                 <ApolloConsumer>
+                   ...(
+                        apolloClient =>
+                          <AuthenticateMutation>
+                            ...(
+                                 (mutate, _renderPropObj) =>
+                                   <LoginForm
+                                     initialValues={email: "", password: ""}
+                                     onSubmit=(onSubmit(mutate, apolloClient))>
+                                     ...(
+                                          ({getValue, onChange, handleSubmit}) =>
+                                            <form
+                                              className=Styles.form
+                                              onSubmit=handleSubmit>
+                                              <Heading
+                                                className=Styles.title level=2>
+                                                ("Login" |> ReasonReact.string)
+                                              </Heading>
+                                              <Input
+                                                className=Styles.inputEmail
+                                                placeholder="Email"
+                                                value=(getValue(Email))
+                                                onChange=(
+                                                  event =>
+                                                    event
+                                                    |> Form.valueFromEvent
+                                                    |> (
+                                                      value =>
+                                                        value
+                                                        |> onChange(Email)
+                                                    )
+                                                )
+                                              />
+                                              <Input
+                                                className=Styles.inputPassword
+                                                placeholder="Password"
+                                                type_=Password
+                                                value=(getValue(Password))
+                                                name="password"
+                                                onChange=(
+                                                  event =>
+                                                    event
+                                                    |> Form.valueFromEvent
+                                                    |> (
+                                                      value =>
+                                                        value
+                                                        |> onChange(Password)
+                                                    )
+                                                )
+                                              />
+                                              <Button
+                                                format=Neutral
+                                                className=Styles.loginButton
+                                                type_=Submit>
+                                                ("Login" |> ReasonReact.string)
+                                              </Button>
+                                            </form>
+                                        )
+                                   </LoginForm>
+                               )
+                          </AuthenticateMutation>
+                      )
+                 </ApolloConsumer>
+               }
            )
-      </ApolloConsumer>
+      </SessionQuery>
     </div>,
 };
