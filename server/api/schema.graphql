@@ -20,4 +20,5 @@ input AuthenticateInput {
 
 type Mutation {
   authenticate(input: AuthenticateInput!): String
+  logout: String
 }

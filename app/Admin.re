@@ -13,6 +13,46 @@ module Session = [%graphql
 ];
 module SessionQuery = ReasonApollo.CreateQuery(Session);
 
+module LogoutButton = {
+  [@bs.send]
+  external resetStore : (ApolloClient.generatedApolloClient, unit) => unit =
+    "";
+
+  module Logout = [%graphql {|
+    mutation Logout {
+      logout
+    }
+  |}];
+
+  module LogoutMutation = ReasonApollo.CreateMutation(Logout);
+
+  let logout = (mutate, apolloClient) =>
+    Js.Promise.(mutate() |> (_data => apolloClient |. resetStore() |> resolve))
+    |> ignore;
+
+  let component = ReasonReact.statelessComponent("LogoutButton");
+
+  let make = children => {
+    ...component,
+    render: _self =>
+      <ApolloConsumer>
+        ...(
+             apolloClient =>
+               <LogoutMutation>
+                 ...(
+                      (mutate, _renderPropObj) =>
+                        <Button
+                          type_=Button
+                          onClick=(_event => logout(mutate, apolloClient))>
+                          ...children
+                        </Button>
+                    )
+               </LogoutMutation>
+           )
+      </ApolloConsumer>,
+  };
+};
+
 module Admin = {
   let component = ReasonReact.statelessComponent("Admin");
   let make = _children => {
@@ -20,6 +60,7 @@ module Admin = {
     render: _self =>
       <div>
         <h1> ("Admin" |> ReasonReact.string) </h1>
+        <LogoutButton> ("Logout" |> ReasonReact.string) </LogoutButton>
         <Link exact=true href="/admin">
           ("Dashboard" |> ReasonReact.string)
         </Link>

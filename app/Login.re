@@ -97,7 +97,7 @@ let onSubmit =
 
   Js.Promise.(
     mutate(~variables=authenticate##variables, ())
-    |> then_(_data => apolloClient |. resetStore |> resolve)
+    |> then_(_data => apolloClient |. resetStore() |> resolve)
     |> ignore
   );
 };

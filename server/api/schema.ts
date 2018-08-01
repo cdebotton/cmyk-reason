@@ -8,16 +8,38 @@ const typeDefs = importSchema('server/api/schema.graphql');
 
 interface Context {
   db: Prisma;
+  getToken: () => string | null;
+  setToken: (token: string | undefined) => void;
 }
 
 const resolvers: IResolvers<{}, Context> = {
   Query: {
-    users: (_parent, _args, context, info) => context.db.query.users({}, info),
+    users: (_parent, args, context, info) => context.db.query.users(args, info),
     user: (_parent, args, context, info) => {
       return context.db.query.user(args, info);
     },
-    session: (_parent, _args, context, info) => {
-      return null;
+    session: async (_parent, _args, context, info) => {
+      const token = context.getToken();
+
+      if (!token) {
+        return null;
+      }
+
+      const decoded = jwt.decode(token);
+
+      if (!decoded || typeof decoded === 'string') {
+        return null;
+      }
+
+      return {
+        token,
+        userId: decoded.user,
+      };
+    },
+  },
+  Session: {
+    user: (parent: any, _args, context, info) => {
+      return context.db.query.user({ where: { id: parent.userId } }, info);
     },
   },
   Mutation: {
@@ -37,6 +59,19 @@ const resolvers: IResolvers<{}, Context> = {
       }
 
       const token = jwt.sign({ user: user.id }, 'SECRETS');
+
+      context.setToken(token);
+
+      return token;
+    },
+    logout: (_parent, _args, context, _info) => {
+      const token = context.getToken();
+
+      if (!token) {
+        return null;
+      }
+
+      context.setToken(undefined);
 
       return token;
     },

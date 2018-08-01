@@ -22,6 +22,9 @@ import schema from './api/schema';
 const { PORT = '3000', NODE_ENV = 'development' } = process.env;
 
 const app = new Koa();
+
+app.keys = ['SECRET_1', 'SECRET_2'];
+
 const db = new Prisma({
   typeDefs: './server/api/schema.graphql',
   endpoint: 'http://localhost:4466',
@@ -29,7 +32,9 @@ const db = new Prisma({
 const apollo = new ApolloServer({
   schema,
   context: ({ ctx }: { ctx: Context }) => ({
-    ...ctx,
+    getToken: () => ctx.cookies.get('jwt', { signed: true }),
+    setToken: (token: string) =>
+      ctx.cookies.set('jwt', token, { signed: true, secure: true }),
     db,
   }),
 });
@@ -58,7 +63,9 @@ app.use(
     const link = new SchemaLink({
       schema,
       context: () => ({
-        ...ctx,
+        getToken: () => ctx.cookies.get('jwt') || null,
+        setToken: (token: string) =>
+          ctx.cookies.set('jwt', token, { signed: true, secure: true }),
         db,
       }),
     });

@@ -11,7 +11,7 @@ let make = (~level: int, ~className=?, children) => {
     switch (level) {
     | raw when raw < 1 || raw > 6 =>
       Js.Exn.raiseError("Level must be between 1 and 6")
-    | _ => ignore()
+    | _ => ()
     };
     ReasonReact.createDomElement(
       {j|h$level|j},
