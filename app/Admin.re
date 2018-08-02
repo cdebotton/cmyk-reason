@@ -53,21 +53,46 @@ module LogoutButton = {
   };
 };
 
-module Admin = {
-  let component = ReasonReact.statelessComponent("Admin");
-  let make = _children => {
+module AdminContainer = {
+  let component = ReasonReact.statelessComponent("AdminProtect");
+
+  let make = children => {
     ...component,
     render: _self =>
+      <SessionQuery>
+        ...(
+             ({result}) =>
+               switch (result) {
+               | Loading => ReasonReact.null
+               | Error(_err) => ReasonReact.null
+               | Data(response) when response##session === None =>
+                 <Redirect to_="/login" />
+               | Data(_response) => children |> ReasonReact.array
+               }
+           )
+      </SessionQuery>,
+  };
+};
+
+let component = ReasonReact.statelessComponent("Admin");
+let make = _children => {
+  ...component,
+  render: _self =>
+    <AdminContainer>
       <div>
         <h1> ("Admin" |> ReasonReact.string) </h1>
-        <LogoutButton> ("Logout" |> ReasonReact.string) </LogoutButton>
+        <LogoutButton>
+          <FontAwesomeIcon icon=FreeSolidIcons.faSignOutAlt />
+        </LogoutButton>
         <Link exact=true href="/admin">
-          ("Dashboard" |> ReasonReact.string)
+          <FontAwesomeIcon icon=FreeSolidIcons.faHome />
         </Link>
         <Link href="/admin/documents">
-          ("Documents" |> ReasonReact.string)
+          <FontAwesomeIcon icon=FreeSolidIcons.faFolderOpen />
         </Link>
-        <Link href="/admin/users"> ("Users" |> ReasonReact.string) </Link>
+        <Link href="/admin/users">
+          <FontAwesomeIcon icon=FreeSolidIcons.faUser />
+        </Link>
         <Router.Consumer>
           ...(
                ({path}) =>
@@ -80,25 +105,6 @@ module Admin = {
                  }
              )
         </Router.Consumer>
-      </div>,
-  };
-};
-
-let component = ReasonReact.statelessComponent("AdminProtect");
-
-let make = _children => {
-  ...component,
-  render: _self =>
-    <SessionQuery>
-      ...(
-           ({result}) =>
-             switch (result) {
-             | Loading => ReasonReact.null
-             | Error(_err) => ReasonReact.null
-             | Data(response) when response##session === None =>
-               <Redirect to_="/login" />
-             | Data(_response) => <Admin />
-             }
-         )
-    </SessionQuery>,
+      </div>
+    </AdminContainer>,
 };
