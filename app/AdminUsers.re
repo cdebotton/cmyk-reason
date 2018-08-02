@@ -20,9 +20,8 @@ let make = _children => {
       ...(
            ({result}) =>
              switch (result) {
-             | Loading => <p> ("Loading..." |> ReasonReact.string) </p>
-             | Error(err) =>
-               <p> (err |> Js.String.make |> ReasonReact.string) </p>
+             | Loading => <Loader />
+             | Error(error) => <ApolloError error />
              | Data(response) =>
                <Fragment>
                  <ul>

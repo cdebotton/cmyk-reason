@@ -42,9 +42,8 @@ let make = (~userId, _children) => {
           ...(
                ({result}) =>
                  switch (result) {
-                 | Loading => <p> ("Loading..." |> ReasonReact.string) </p>
-                 | Error(err) =>
-                   <p> (err |> Js.String.make |> ReasonReact.string) </p>
+                 | Loading => <Loader />
+                 | Error(error) => <ApolloError error />
                  | Data(response) =>
                    <div>
                      <p> (response##user##id |> ReasonReact.string) </p>

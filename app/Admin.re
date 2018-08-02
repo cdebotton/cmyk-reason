@@ -2,8 +2,7 @@ module Styles = {
   open Css;
 
   let bgColor = Colors.getColor(Light);
-  let sidebarBgColor =
-    [bgColor(0), bgColor(1), bgColor(2), bgColor(3)] |> Utils.joinList;
+  let sidebarBgColor = [bgColor(0), bgColor(1)] |> Utils.joinList;
   let container =
     style([display(grid), gridTemplateColumns([minContent, auto])]);
   let heading =
@@ -98,7 +97,7 @@ module AdminContainer = {
         ...(
              ({result}) =>
                switch (result) {
-               | Loading => ReasonReact.null
+               | Loading => <Loader />
                | Error(_err) => ReasonReact.null
                | Data(response) when response##session === None =>
                  <Redirect to_="/login" />

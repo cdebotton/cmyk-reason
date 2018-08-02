@@ -20,12 +20,12 @@ module Styles = {
       | Positive => Colors.getColor(Dark)
       };
 
-    let buttonBackgroundColors =
-      [bgColor(0), bgColor(1), bgColor(2), bgColor(3)] |> Utils.joinList;
+    let buttonBackgroundColors = [bgColor(0), bgColor(3)] |> Utils.joinList;
 
     let textColor = fgColor(1);
 
     style([
+      borderRadius(3 |. px),
       fontSize(0.75 |. rem),
       padding2(~v=0.5 |. rem, ~h=0.8 |. rem),
       border(0 |> px, none, transparent),
@@ -63,16 +63,20 @@ let make =
       ~onClick=defaultOnClick,
       children,
     ) => {
-  ...component,
-  render: _self =>
-    <button
-      className=Utils.(
-                  [Some(format |> Styles.button), className]
-                  |> unwrapOptionalList
-                  |> joinList(~sep=" ")
-                )
-      onClick
-      type_=(getButtonType(type_))>
-      (children |> ReasonReact.array)
-    </button>,
+  let className =
+    Utils.(
+      [Some(format |> Styles.button), className]
+      |> unwrapOptionalList
+      |> joinList(~sep=" ")
+    );
+
+  let type_ = getButtonType(type_);
+
+  {
+    ...component,
+    render: _self =>
+      <button className onClick type_>
+        (children |> ReasonReact.array)
+      </button>,
+  };
 };
