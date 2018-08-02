@@ -1,3 +1,35 @@
+module Styles = {
+  open Css;
+
+  let bgColor = Colors.getColor(Light);
+  let sidebarBgColor =
+    [bgColor(0), bgColor(1), bgColor(2), bgColor(3)] |> Utils.joinList;
+
+  let container =
+    style([display(grid), gridTemplateColumns([minContent, auto])]);
+  let heading =
+    style([
+      `declaration(("writingMode", "vertical-lr")),
+      margin(0 |. px),
+      padding(0.4 |. rem),
+      userSelect(none),
+    ]);
+  let sidebar =
+    style([
+      height(100. |. vh),
+      display(`flex),
+      flexDirection(column),
+      flexWrap(nowrap),
+      alignItems(center),
+      `declaration((
+        "backgroundImage",
+        {j|linear-gradient(to bottom right, $sidebarBgColor)|j},
+      )),
+    ]);
+  let logoutButton = style([marginTop(auto)]);
+  let adminLink = style([padding(0.5 |. rem)]);
+};
+
 module Session = [%graphql
   {|
   query Session {
@@ -11,6 +43,7 @@ module Session = [%graphql
   }
   |}
 ];
+
 module SessionQuery = ReasonApollo.CreateQuery(Session);
 
 module LogoutButton = {
@@ -43,6 +76,7 @@ module LogoutButton = {
                       (mutate, _renderPropObj) =>
                         <Button
                           type_=Button
+                          className=Styles.logoutButton
                           onClick=(_event => logout(mutate, apolloClient))>
                           ...children
                         </Button>
@@ -79,20 +113,24 @@ let make = _children => {
   ...component,
   render: _self =>
     <AdminContainer>
-      <div>
-        <h1> ("Admin" |> ReasonReact.string) </h1>
-        <LogoutButton>
-          <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
-        </LogoutButton>
-        <Link exact=true href="/admin">
-          <FontAwesomeIcon icon=SolidIcons.faHome />
-        </Link>
-        <Link href="/admin/documents">
-          <FontAwesomeIcon icon=SolidIcons.faFolderOpen />
-        </Link>
-        <Link href="/admin/users">
-          <FontAwesomeIcon icon=SolidIcons.faUser />
-        </Link>
+      <div className=Styles.container>
+        <div className=Styles.sidebar>
+          <Heading className=Styles.heading level=1>
+            ("Admin" |> ReasonReact.string)
+          </Heading>
+          <Link className=Styles.adminLink exact=true href="/admin">
+            <FontAwesomeIcon icon=SolidIcons.faHome />
+          </Link>
+          <Link className=Styles.adminLink href="/admin/documents">
+            <FontAwesomeIcon icon=SolidIcons.faFolderOpen />
+          </Link>
+          <Link className=Styles.adminLink href="/admin/users">
+            <FontAwesomeIcon icon=SolidIcons.faUser />
+          </Link>
+          <LogoutButton>
+            <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
+          </LogoutButton>
+        </div>
         <Router.Consumer>
           ...(
                ({path}) =>

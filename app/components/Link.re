@@ -22,7 +22,7 @@ let rec matchPartialPath = ((path, href), ~exact, ~match=true, ()) =>
   | (_, _, _, _) => false
   };
 
-let make = (~href, ~exact=false, children) => {
+let make = (~href, ~className=?, ~exact=false, children) => {
   let onClick = event => {
     event |> ReactEventRe.Mouse.preventDefault;
     href |> ReasonReact.Router.push;
@@ -40,7 +40,12 @@ let make = (~href, ~exact=false, children) => {
                    ~exact,
                    (),
                  );
-               let className = Styles.main(active);
+               let className =
+                 Utils.(
+                   [Some(Styles.main(active)), className]
+                   |> unwrapOptionalList
+                   |> joinList(~sep=" ")
+                 );
                <a href onClick className> (children |> ReasonReact.array) </a>;
              }
            )
