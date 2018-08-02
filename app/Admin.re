@@ -82,16 +82,16 @@ let make = _children => {
       <div>
         <h1> ("Admin" |> ReasonReact.string) </h1>
         <LogoutButton>
-          <FontAwesomeIcon icon=FreeSolidIcons.faSignOutAlt />
+          <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
         </LogoutButton>
         <Link exact=true href="/admin">
-          <FontAwesomeIcon icon=FreeSolidIcons.faHome />
+          <FontAwesomeIcon icon=SolidIcons.faHome />
         </Link>
         <Link href="/admin/documents">
-          <FontAwesomeIcon icon=FreeSolidIcons.faFolderOpen />
+          <FontAwesomeIcon icon=SolidIcons.faFolderOpen />
         </Link>
         <Link href="/admin/users">
-          <FontAwesomeIcon icon=FreeSolidIcons.faUser />
+          <FontAwesomeIcon icon=SolidIcons.faUser />
         </Link>
         <Router.Consumer>
           ...(
