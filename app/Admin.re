@@ -131,18 +131,20 @@ let make = _children => {
             <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
           </LogoutButton>
         </div>
-        <Router.Consumer>
-          ...(
-               ({path}) =>
-                 switch (path) {
-                 | ["admin"] => <p> ("Dashboard" |> ReasonReact.string) </p>
-                 | ["admin", "documents"] =>
-                   <p> ("Docs" |> ReasonReact.string) </p>
-                 | ["admin", "users", ..._rest] => <AdminUsers />
-                 | _ => <NotFound />
-                 }
-             )
-        </Router.Consumer>
+        <div>
+          <Router.Consumer>
+            ...(
+                 ({path}) =>
+                   switch (path) {
+                   | ["admin"] => <p> ("Dashboard" |> ReasonReact.string) </p>
+                   | ["admin", "documents"] =>
+                     <p> ("Docs" |> ReasonReact.string) </p>
+                   | ["admin", "users", ..._rest] => <AdminUsers />
+                   | _ => <NotFound />
+                   }
+               )
+          </Router.Consumer>
+        </div>
       </div>
     </AdminContainer>,
 };
