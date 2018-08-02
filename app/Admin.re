@@ -4,7 +4,6 @@ module Styles = {
   let bgColor = Colors.getColor(Light);
   let sidebarBgColor =
     [bgColor(0), bgColor(1), bgColor(2), bgColor(3)] |> Utils.joinList;
-
   let container =
     style([display(grid), gridTemplateColumns([minContent, auto])]);
   let heading =
@@ -14,11 +13,13 @@ module Styles = {
       padding(0.4 |. rem),
       userSelect(none),
     ]);
+  let content = style([padding2(~v=0.5 |. rem, ~h=1. |. rem)]);
   let sidebar =
     style([
       height(100. |. vh),
       display(`flex),
       flexDirection(column),
+      padding2(~v=0.5 |. rem, ~h=0. |. rem),
       flexWrap(nowrap),
       alignItems(center),
       `declaration((
@@ -116,7 +117,7 @@ let make = _children => {
       <div className=Styles.container>
         <div className=Styles.sidebar>
           <Heading className=Styles.heading level=1>
-            ("Admin" |> ReasonReact.string)
+            ("CMYK" |> ReasonReact.string)
           </Heading>
           <Link className=Styles.adminLink exact=true href="/admin">
             <FontAwesomeIcon icon=SolidIcons.faHome />
@@ -131,7 +132,7 @@ let make = _children => {
             <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
           </LogoutButton>
         </div>
-        <div>
+        <div className=Styles.content>
           <Router.Consumer>
             ...(
                  ({path}) =>
