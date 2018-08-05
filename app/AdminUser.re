@@ -79,8 +79,8 @@ let make = (~userId, _children) => {
                        }
                        onSubmit>
                        ...(
-                            ({onChange, getValue}) =>
-                              <form>
+                            ({onChange, getValue, handleSubmit}) =>
+                              <form onSubmit=handleSubmit>
                                 <Input
                                   placeholder="Email"
                                   value=(getValue(FormConfig.Email))
@@ -127,6 +127,9 @@ let make = (~userId, _children) => {
                                     ("Unauthorized" |> ReasonReact.string)
                                   </option>
                                 </select>
+                                <Button type_=Submit>
+                                  ("Save" |> ReasonReact.string)
+                                </Button>
                               </form>
                           )
                      </UserForm>
