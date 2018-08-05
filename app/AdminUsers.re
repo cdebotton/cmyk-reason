@@ -55,7 +55,7 @@ let make = _children => {
                <div className=Styles.layout>
                  <div>
                    <Heading level=2> ("Users" |> ReasonReact.string) </Heading>
-                   <List
+                   <ItemList
                      items=response##users
                      getKey=(
                        user => {
