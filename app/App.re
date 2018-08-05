@@ -2,7 +2,8 @@ Css.(
   global(
     "body",
     [margin(0. |. rem), padding(0. |. rem), fontFamily("sans-serif")],
-  )
+  ),
+  global("*,*::before,*::after", [boxSizing(borderBox)]),
 );
 
 module Styles = {

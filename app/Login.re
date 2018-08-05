@@ -183,7 +183,7 @@ let make = _children => {
                             format=Neutral
                             className=Styles.loginButton
                             type_=Submit>
-                            ("Login" |> ReasonReact.string)
+                            ...("Login" |> ReasonReact.string)
                           </Button>
                         </form>
                     )

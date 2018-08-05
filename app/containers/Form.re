@@ -7,6 +7,12 @@ module type Configuration = {
   let set: ((key, value), t) => t;
 };
 
+type interface('key, 'value) = {
+  getValue: 'key => 'value,
+  onChange: ('key, 'value) => unit,
+  handleSubmit: ReactEventRe.Form.t => unit,
+};
+
 let valueFromEvent = event => {
   let domObject =
     event |> ReactEventRe.Form.target |> ReactDOMRe.domElementToObj;
@@ -23,11 +29,6 @@ module Make = (Form: Configuration) => {
     | Change((Form.key, Form.value))
     | Submit
     | Reset;
-  type interface = {
-    getValue: Form.key => Form.value,
-    onChange: (Form.key, Form.value) => unit,
-    handleSubmit: ReactEventRe.Form.t => unit,
-  };
 
   let component = ReasonReact.reducerComponent(Form.debugName);
 

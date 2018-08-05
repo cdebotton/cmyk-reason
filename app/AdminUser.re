@@ -1,13 +1,13 @@
 module User = [%graphql
   {|
-  query User($where: UserWhereUniqueInput!) {
-    user(where: $where) {
-      id
-      email
-      role
-    }
-  }
-  |}
+     query User($where: UserWhereUniqueInput!) {
+       user(where: $where) {
+         id
+         email
+         role
+       }
+     }
+     |}
 ];
 
 let roleToString = role =>
@@ -51,6 +51,8 @@ module FormConfig = {
     };
 };
 
+type interface = Form.interface(FormConfig.key, FormConfig.value);
+
 module UserForm = Form.Make(FormConfig);
 
 let onSubmit = values => Js.log(values);
@@ -61,7 +63,46 @@ let make = (~userId, _children) => {
   let userQuery = User.make(~where={"id": Some(userId), "email": None}, ());
   {
     ...component,
-    render: _self =>
+    render: _self => {
+      let renderUserForm = ({onChange, getValue, handleSubmit}: interface) =>
+        <form onSubmit=handleSubmit>
+          <Heading level=3>
+            ("Edit " ++ getValue(Email) |> ReasonReact.string)
+          </Heading>
+          <Input
+            placeholder="Email"
+            value=(getValue(FormConfig.Email))
+            onChange=(
+              event => {
+                let obj =
+                  event
+                  |> ReactEventRe.Form.target
+                  |> ReactDOMRe.domElementToObj;
+                obj##value |> onChange(Email);
+              }
+            )
+          />
+          <select
+            value=(getValue(Role))
+            onChange=(
+              event => {
+                let obj =
+                  event
+                  |> ReactEventRe.Form.target
+                  |> ReactDOMRe.domElementToObj;
+                obj##value |> onChange(Role);
+              }
+            )>
+            <option value="admin"> ("Admin" |> ReasonReact.string) </option>
+            <option value="editor"> ("Editor" |> ReasonReact.string) </option>
+            <option value="user"> ("User" |> ReasonReact.string) </option>
+            <option value="unauthorized">
+              ("Unauthorized" |> ReasonReact.string)
+            </option>
+          </select>
+          <Button type_=Submit> ...("Save" |> ReasonReact.string) </Button>
+        </form>;
+
       <div>
         <UserQuery variables=userQuery##variables>
           ...(
@@ -70,74 +111,20 @@ let make = (~userId, _children) => {
                  | Loading => <Loader />
                  | Error(error) => <ApolloError error />
                  | Data(response) =>
-                   <div>
-                     <p> (response##user##id |> ReasonReact.string) </p>
+                   <div key=response##user##id>
                      <UserForm
                        initialValues={
                          email: response##user##email,
                          role: response##user##role,
                        }
                        onSubmit>
-                       ...(
-                            ({onChange, getValue, handleSubmit}) =>
-                              <form onSubmit=handleSubmit>
-                                <Input
-                                  placeholder="Email"
-                                  value=(getValue(FormConfig.Email))
-                                  onChange=(
-                                    event => {
-                                      let obj =
-                                        event
-                                        |> ReactEventRe.Form.target
-                                        |> ReactDOMRe.domElementToObj;
-                                      obj##value |> onChange(Email);
-                                    }
-                                  )
-                                />
-                                <select
-                                  onChange=(
-                                    event => {
-                                      let obj =
-                                        event
-                                        |> ReactEventRe.Form.target
-                                        |> ReactDOMRe.domElementToObj;
-                                      obj##value |> onChange(Role);
-                                    }
-                                  )>
-                                  <option
-                                    value="admin"
-                                    selected=(getValue(Role) === "admin")>
-                                    ("Admin" |> ReasonReact.string)
-                                  </option>
-                                  <option
-                                    value="editor"
-                                    selected=(getValue(Role) === "editor")>
-                                    ("Editor" |> ReasonReact.string)
-                                  </option>
-                                  <option
-                                    value="user"
-                                    selected=(getValue(Role) === "user")>
-                                    ("User" |> ReasonReact.string)
-                                  </option>
-                                  <option
-                                    value="unauthorized"
-                                    selected=(
-                                      getValue(Role) === "unauthorized"
-                                    )>
-                                    ("Unauthorized" |> ReasonReact.string)
-                                  </option>
-                                </select>
-                                <Button type_=Submit>
-                                  ("Save" |> ReasonReact.string)
-                                </Button>
-                              </form>
-                          )
+                       ...renderUserForm
                      </UserForm>
                    </div>
                  }
              )
         </UserQuery>
-      </div>,
+      </div>;
+    },
   };
 };
-1;

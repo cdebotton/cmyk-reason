@@ -43,6 +43,20 @@ const resolvers: IResolvers<{}, Context> = {
     },
   },
   Mutation: {
+    createUser: async (_parent, args, context, info) => {
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(args.data.password, salt);
+
+      return await context.db.mutation.createUser(
+        {
+          data: {
+            ...args.data,
+            password,
+          },
+        },
+        info,
+      );
+    },
     authenticate: async (_parent, args, context, _info) => {
       const user = await context.db.query.user({
         where: { email: args.input.email },

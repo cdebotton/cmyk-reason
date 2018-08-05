@@ -31,6 +31,10 @@ const db = new Prisma({
 });
 const apollo = new ApolloServer({
   schema,
+  playground: {
+    // @ts-ignore
+    'editor.theme': 'light',
+  },
   context: ({ ctx }: { ctx: Context }) => ({
     getToken: () => ctx.cookies.get('jwt', { signed: true }),
     setToken: (token: string) =>
@@ -49,10 +53,10 @@ const server = https.createServer(
   app.callback(),
 );
 
+app.use(compress());
+
 // @ts-ignore
 apollo.applyMiddleware({ app });
-
-app.use(compress());
 
 if (NODE_ENV !== 'development') {
   app.use(mount('/dist', serveStatic(path.join(process.cwd(), 'dist/client'))));

@@ -1,3 +1,32 @@
+module Styles = {
+  let layout =
+    Css.(style([display(grid), gridTemplateColumns([1. |. fr, 1. |. fr])]));
+
+  let userItem =
+    Css.(
+      style([
+        display(`flex),
+        alignItems(center),
+        display(block),
+        padding(0.5 |. rem),
+        hover([backgroundColor(hsla(200, 50, 50, 0.5))]),
+      ])
+    );
+
+  let avatar =
+    Css.(
+      style([
+        width(3. |. rem),
+        height(3. |. rem),
+        borderRadius(50. |. pct),
+        backgroundColor(black),
+        marginRight(1. |. rem),
+      ])
+    );
+
+  let activeUserItem = Css.(style([textDecoration(underline)]));
+};
+
 module Users = [%graphql
   {|
   query Users {
@@ -23,23 +52,34 @@ let make = _children => {
              | Loading => <Loader />
              | Error(error) => <ApolloError error />
              | Data(response) =>
-               <Fragment>
-                 <ul>
-                   (
-                     Belt.Array.map(
-                       response##users,
+               <div className=Styles.layout>
+                 <div>
+                   <Heading level=2> ("Users" |> ReasonReact.string) </Heading>
+                   <List
+                     items=response##users
+                     getKey=(
                        user => {
                          let id = user##id;
-                         <li key=user##id>
-                           <Link href={j|/admin/users/$id|j}>
-                             (user##email |> ReasonReact.string)
-                           </Link>
-                         </li>;
-                       },
+                         {j|USER_$id|j};
+                       }
                      )
-                     |> ReasonReact.array
-                   )
-                 </ul>
+                     renderItem=(
+                       user => {
+                         let id = user##id;
+                         let href = {j|/admin/users/$id|j};
+                         <Link
+                           href
+                           className=Styles.userItem
+                           activeClassName=Styles.activeUserItem>
+                           ...<Fragment>
+                                <div className=Styles.avatar />
+                                (user##email |> ReasonReact.string)
+                              </Fragment>
+                         </Link>;
+                       }
+                     )
+                   />
+                 </div>
                  <Router.Consumer>
                    ...(
                         ({path}) =>
@@ -49,7 +89,7 @@ let make = _children => {
                           }
                       )
                  </Router.Consumer>
-               </Fragment>
+               </div>
              }
          )
     </UsersQuery>,

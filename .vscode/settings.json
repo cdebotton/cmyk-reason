@@ -1,6 +1,4 @@
 {
-  "reason.diagnostics.tools": [
-    "bsb"
-  ],
+  "reason.diagnostics.tools": ["bsb"],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

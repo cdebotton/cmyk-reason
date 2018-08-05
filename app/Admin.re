@@ -30,22 +30,6 @@ module Styles = {
   let adminLink = style([padding(0.5 |. rem)]);
 };
 
-module Session = [%graphql
-  {|
-  query Session {
-    session {
-      token
-      user {
-        id
-        email
-      }
-    }
-  }
-  |}
-];
-
-module SessionQuery = ReasonApollo.CreateQuery(Session);
-
 module LogoutButton = {
   [@bs.send]
   external resetStore : (ApolloClient.generatedApolloClient, unit) => unit =
@@ -87,10 +71,59 @@ module LogoutButton = {
   };
 };
 
-module AdminContainer = {
-  let component = ReasonReact.statelessComponent("AdminProtect");
+let component = ReasonReact.statelessComponent("Admin");
+let make = _children => {
+  module Session = [%graphql
+    {|
+  query Session {
+    session {
+      token
+      user {
+        id
+        email
+      }
+    }
+  }
+  |}
+  ];
 
-  let make = children => {
+  module SessionQuery = ReasonApollo.CreateQuery(Session);
+
+  let admin =
+    <div className=Styles.container>
+      <div className=Styles.sidebar>
+        <Heading className=Styles.heading level=1>
+          ("CMYK" |> ReasonReact.string)
+        </Heading>
+        <Link className=Styles.adminLink exact=true href="/admin">
+          ...<FontAwesomeIcon icon=SolidIcons.faHome />
+        </Link>
+        <Link className=Styles.adminLink href="/admin/documents">
+          ...<FontAwesomeIcon icon=SolidIcons.faFolderOpen />
+        </Link>
+        <Link className=Styles.adminLink href="/admin/users">
+          ...<FontAwesomeIcon icon=SolidIcons.faUser />
+        </Link>
+        <LogoutButton>
+          ...<FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
+        </LogoutButton>
+      </div>
+      <div className=Styles.content>
+        <Router.Consumer>
+          ...(
+               ({path}) =>
+                 switch (path) {
+                 | ["admin"] => <p> ("Dashboard" |> ReasonReact.string) </p>
+                 | ["admin", "documents"] =>
+                   <p> ("Docs" |> ReasonReact.string) </p>
+                 | ["admin", "users", ..._rest] => <AdminUsers />
+                 | _ => <NotFound />
+                 }
+             )
+        </Router.Consumer>
+      </div>
+    </div>;
+  {
     ...component,
     render: _self =>
       <SessionQuery>
@@ -101,50 +134,9 @@ module AdminContainer = {
                | Error(_err) => ReasonReact.null
                | Data(response) when response##session === None =>
                  <Redirect to_="/login" />
-               | Data(_response) => children |> ReasonReact.array
+               | Data(_response) => admin
                }
            )
       </SessionQuery>,
   };
-};
-
-let component = ReasonReact.statelessComponent("Admin");
-let make = _children => {
-  ...component,
-  render: _self =>
-    <AdminContainer>
-      <div className=Styles.container>
-        <div className=Styles.sidebar>
-          <Heading className=Styles.heading level=1>
-            ("CMYK" |> ReasonReact.string)
-          </Heading>
-          <Link className=Styles.adminLink exact=true href="/admin">
-            <FontAwesomeIcon icon=SolidIcons.faHome />
-          </Link>
-          <Link className=Styles.adminLink href="/admin/documents">
-            <FontAwesomeIcon icon=SolidIcons.faFolderOpen />
-          </Link>
-          <Link className=Styles.adminLink href="/admin/users">
-            <FontAwesomeIcon icon=SolidIcons.faUser />
-          </Link>
-          <LogoutButton>
-            <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
-          </LogoutButton>
-        </div>
-        <div className=Styles.content>
-          <Router.Consumer>
-            ...(
-                 ({path}) =>
-                   switch (path) {
-                   | ["admin"] => <p> ("Dashboard" |> ReasonReact.string) </p>
-                   | ["admin", "documents"] =>
-                     <p> ("Docs" |> ReasonReact.string) </p>
-                   | ["admin", "users", ..._rest] => <AdminUsers />
-                   | _ => <NotFound />
-                   }
-               )
-          </Router.Consumer>
-        </div>
-      </div>
-    </AdminContainer>,
 };

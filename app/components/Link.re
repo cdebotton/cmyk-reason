@@ -3,14 +3,8 @@ let component = ReasonReact.statelessComponent("Link");
 module Styles = {
   open Css;
 
-  let getColor = active =>
-    if (active) {
-      color(red);
-    } else {
-      color(black);
-    };
-
-  let main = active => style([textDecoration(none), getColor(active)]);
+  let main = style([textDecoration(none), color(black)]);
+  let active = style([]);
 };
 
 let rec matchPartialPath = ((path, href), ~exact, ~match=true, ()) =>
@@ -22,7 +16,14 @@ let rec matchPartialPath = ((path, href), ~exact, ~match=true, ()) =>
   | (_, _, _, _) => false
   };
 
-let make = (~href, ~className=?, ~exact=false, children) => {
+let make =
+    (
+      ~href,
+      ~className=?,
+      ~activeClassName=Styles.active,
+      ~exact=false,
+      children,
+    ) => {
   let onClick = event => {
     event |> ReactEventRe.Mouse.preventDefault;
     href |> ReasonReact.Router.push;
@@ -40,13 +41,21 @@ let make = (~href, ~className=?, ~exact=false, children) => {
                    ~exact,
                    (),
                  );
+
+               let whenActiveClassName =
+                 if (active) {
+                   Some(activeClassName);
+                 } else {
+                   None;
+                 };
+
                let className =
                  Utils.(
-                   [Some(Styles.main(active)), className]
+                   [Some(Styles.main), className, whenActiveClassName]
                    |> unwrapOptionalList
                    |> joinList(~sep=" ")
                  );
-               <a href onClick className> (children |> ReasonReact.array) </a>;
+               <a href onClick className> children </a>;
              }
            )
       </Router.Consumer>,

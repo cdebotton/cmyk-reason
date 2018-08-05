@@ -1,6 +1,7 @@
 # import User from "./prisma.graphql"
 # import UserWhereInput from "./prisma.graphql"
 # import UserWhereUniqueInput from "./prisma.graphql"
+# import UserCreateInput from "./prisma.graphql"
 
 type Session {
   token: String!
@@ -19,6 +20,7 @@ input AuthenticateInput {
 }
 
 type Mutation {
+  createUser(data: UserCreateInput!): User!
   authenticate(input: AuthenticateInput!): String
   logout: String
 }
