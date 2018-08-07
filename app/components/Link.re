@@ -4,7 +4,7 @@ module Styles = {
   open Css;
 
   let main = style([textDecoration(none), color(black)]);
-  let active = style([]);
+  let active = style([color(red)]);
 };
 
 let rec matchPartialPath = ((path, href), ~exact, ~match=true, ()) =>

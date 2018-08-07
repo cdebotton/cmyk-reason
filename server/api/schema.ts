@@ -57,6 +57,9 @@ const resolvers: IResolvers<{}, Context> = {
         info,
       );
     },
+    updateUser: async (_parent, args, context, info) => {
+      return await context.db.mutation.updateUser(args, info);
+    },
     authenticate: async (_parent, args, context, _info) => {
       const user = await context.db.query.user({
         where: { email: args.input.email },

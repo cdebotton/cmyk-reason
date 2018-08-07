@@ -33,6 +33,7 @@ module Users = [%graphql
     users {
       id
       email
+      role
     }
   }
 |}
@@ -74,6 +75,11 @@ let make = _children => {
                            <Fragment>
                              <div className=Styles.avatar />
                              (user##email |> ReasonReact.string)
+                             (
+                               user##role
+                               |> Role.roleToString
+                               |> ReasonReact.string
+                             )
                            </Fragment>
                          </Link>;
                        }

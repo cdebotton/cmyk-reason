@@ -10,24 +10,19 @@ module User = [%graphql
      |}
 ];
 
-let roleToString = role =>
-  switch (role) {
-  | `ADMIN => "admin"
-  | `USER => "user"
-  | `UNAUTHORIZED => "unauthorized"
-  | `EDITOR => "editor"
-  };
-
-let stringToRole = role =>
-  switch (role) {
-  | "admin" => `ADMIN
-  | "user" => `USER
-  | "unauthorized" => `UNAUTHORIZED
-  | "editor" => `EDITOR
-  | role => Js.Exn.raiseError({j|Unrecognized role $role|j})
-  };
-
 module UserQuery = ReasonApollo.CreateQuery(User);
+
+module UpdateUser = [%graphql {|
+  mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
+    updateUser(data: $data, where: $where) {
+      id
+      email
+      role
+    }
+  }
+|}];
+
+module UpdateUserMutation = ReasonApollo.CreateMutation(UpdateUser);
 
 module FormConfig = {
   type value = string;
@@ -42,12 +37,12 @@ module FormConfig = {
   let get = (key, state) =>
     switch (key) {
     | Email => state.email
-    | Role => state.role |> roleToString
+    | Role => state.role |> Role.roleToString
     };
   let set = ((key, value), state) =>
     switch (key) {
     | Email => {...state, email: value}
-    | Role => {...state, role: value |> stringToRole}
+    | Role => {...state, role: value |> Role.stringToRole}
     };
 };
 
@@ -55,7 +50,21 @@ type interface = Form.interface(FormConfig.key, FormConfig.value);
 
 module UserForm = Form.Make(FormConfig);
 
-let onSubmit = values => Js.log(values);
+let onSubmit = (userId, mutate: UpdateUserMutation.apolloMutation, values: FormConfig.t) => {
+  let updateUser = UpdateUser.make(
+    ~data={
+      "email": values.email,
+      "role": values.role,
+    },
+    ~where={
+      "id": Some(userId),
+      "email": None
+    },
+    ()
+  );
+
+  mutate(~variables=updateUser##variables, ()) |> ignore;
+};
 
 let component = ReasonReact.statelessComponent("AdminUser");
 
@@ -89,28 +98,31 @@ let make = (~userId, _children) => {
           <Button type_=Submit> ("Save" |> ReasonReact.string) </Button>
         </form>;
 
-      <div>
-        <UserQuery variables=userQuery##variables>
-          ...(
-               ({result}) =>
-                 switch (result) {
-                 | Loading => <Loader />
-                 | Error(error) => <ApolloError error />
-                 | Data(response) =>
-                   <div key=response##user##id>
-                     <UserForm
-                       initialValues={
-                         email: response##user##email,
-                         role: response##user##role,
-                       }
-                       onSubmit>
-                       ...renderUserForm
-                     </UserForm>
-                   </div>
-                 }
-             )
-        </UserQuery>
-      </div>;
+
+      <UserQuery variables=userQuery##variables>
+        ...(
+              ({result}) =>
+                switch (result) {
+                | Loading => <Loader />
+                | Error(error) => <ApolloError error />
+                | Data(response) =>
+                  <div key=response##user##id>
+                    <UpdateUserMutation>
+                      ...((mutate, _) => 
+                        <UserForm
+                          initialValues={
+                            email: response##user##email,
+                            role: response##user##role,
+                          }
+                          onSubmit=onSubmit(response##user##id, mutate)>
+                          ...renderUserForm
+                        </UserForm>
+                      )
+                    </UpdateUserMutation>
+                  </div>
+                }
+            )
+      </UserQuery>;
     },
   };
 };
