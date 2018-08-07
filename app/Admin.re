@@ -96,16 +96,16 @@ let make = _children => {
           ("CMYK" |> ReasonReact.string)
         </Heading>
         <Link className=Styles.adminLink exact=true href="/admin">
-          ...<FontAwesomeIcon icon=SolidIcons.faHome />
+          <FontAwesomeIcon icon=SolidIcons.faHome />
         </Link>
         <Link className=Styles.adminLink href="/admin/documents">
-          ...<FontAwesomeIcon icon=SolidIcons.faFolderOpen />
+          <FontAwesomeIcon icon=SolidIcons.faFolderOpen />
         </Link>
         <Link className=Styles.adminLink href="/admin/users">
-          ...<FontAwesomeIcon icon=SolidIcons.faUser />
+          <FontAwesomeIcon icon=SolidIcons.faUser />
         </Link>
         <LogoutButton>
-          ...<FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
+          <FontAwesomeIcon icon=SolidIcons.faSignOutAlt />
         </LogoutButton>
       </div>
       <div className=Styles.content>

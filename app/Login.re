@@ -159,12 +159,7 @@ let make = _children => {
                             className=Styles.inputEmail
                             placeholder="Email"
                             value=(getValue(Email))
-                            onChange=(
-                              event =>
-                                event
-                                |> Form.valueFromEvent
-                                |> (value => value |> onChange(Email))
-                            )
+                            onChange=(onChange(Email))
                           />
                           <Input
                             className=Styles.inputPassword
@@ -172,18 +167,13 @@ let make = _children => {
                             type_=Password
                             value=(getValue(Password))
                             name="password"
-                            onChange=(
-                              event =>
-                                event
-                                |> Form.valueFromEvent
-                                |> (value => value |> onChange(Password))
-                            )
+                            onChange=(onChange(Password))
                           />
                           <Button
                             format=Neutral
                             className=Styles.loginButton
                             type_=Submit>
-                            ...("Login" |> ReasonReact.string)
+                            ("Login" |> ReasonReact.string)
                           </Button>
                         </form>
                     )

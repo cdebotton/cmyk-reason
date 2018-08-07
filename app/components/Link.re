@@ -55,7 +55,7 @@ let make =
                    |> unwrapOptionalList
                    |> joinList(~sep=" ")
                  );
-               <a href onClick className> children </a>;
+               <a href onClick className> ...children </a>;
              }
            )
       </Router.Consumer>,

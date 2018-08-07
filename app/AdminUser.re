@@ -72,26 +72,12 @@ let make = (~userId, _children) => {
           <Input
             placeholder="Email"
             value=(getValue(FormConfig.Email))
-            onChange=(
-              event => {
-                let obj =
-                  event
-                  |> ReactEventRe.Form.target
-                  |> ReactDOMRe.domElementToObj;
-                obj##value |> onChange(Email);
-              }
-            )
+            onChange=(onChange(Email))
           />
           <select
             value=(getValue(Role))
             onChange=(
-              event => {
-                let obj =
-                  event
-                  |> ReactEventRe.Form.target
-                  |> ReactDOMRe.domElementToObj;
-                obj##value |> onChange(Role);
-              }
+              event => ReactEvent.Form.(event->target##value) |> onChange(Role) 
             )>
             <option value="admin"> ("Admin" |> ReasonReact.string) </option>
             <option value="editor"> ("Editor" |> ReasonReact.string) </option>
@@ -100,7 +86,7 @@ let make = (~userId, _children) => {
               ("Unauthorized" |> ReasonReact.string)
             </option>
           </select>
-          <Button type_=Submit> ...("Save" |> ReasonReact.string) </Button>
+          <Button type_=Submit> ("Save" |> ReasonReact.string) </Button>
         </form>;
 
       <div>

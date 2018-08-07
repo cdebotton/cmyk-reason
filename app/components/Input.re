@@ -58,7 +58,7 @@ let inputType = type_ =>
   | Checkbox => "checkbox"
   };
 
-let defaultOnChange = _event => ();
+let defaultOnChange = _value => ();
 
 module LabelPoseConfig = {
   [@bs.deriving abstract]
@@ -127,7 +127,7 @@ let make =
         className=Styles.input
         ?name
         value
-        onChange
+        onChange=(event => ReactEvent.Form.(event->target##value) |> onChange)
         placeholder
         type_=(inputType(type_))
       />

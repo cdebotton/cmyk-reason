@@ -50,12 +50,11 @@ module Browser = {
           search: url.search,
         })
       },
-    subscriptions: ({send}) => [
-      ReasonReact.Sub(
-        () => ReasonReact.Router.watchUrl(url => Push(url) |> send),
-        ReasonReact.Router.unwatchUrl,
-      ),
-    ],
+    didMount: ({send, onUnmount}) => {
+      let urlWatcher = ReasonReact.Router.watchUrl(url => Push(url) |> send);
+
+      onUnmount(() => ReasonReact.Router.unwatchUrl(urlWatcher));
+    },
     render: ({state}) =>
       <RouterContext.Provider value=state>
         ...children

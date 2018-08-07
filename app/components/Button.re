@@ -74,6 +74,6 @@ let make =
 
   {
     ...component,
-    render: _self => <button className onClick type_> children </button>,
+    render: _self => <button className onClick type_> ...children </button>,
   };
 };

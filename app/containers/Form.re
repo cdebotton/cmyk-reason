@@ -10,14 +10,7 @@ module type Configuration = {
 type interface('key, 'value) = {
   getValue: 'key => 'value,
   onChange: ('key, 'value) => unit,
-  handleSubmit: ReactEventRe.Form.t => unit,
-};
-
-let valueFromEvent = event => {
-  let domObject =
-    event |> ReactEventRe.Form.target |> ReactDOMRe.domElementToObj;
-
-  domObject##value;
+  handleSubmit: ReactEvent.Form.t => unit,
 };
 
 module Make = (Form: Configuration) => {
@@ -52,7 +45,7 @@ module Make = (Form: Configuration) => {
         let onChange = (key, value) => Change((key, value)) |> send;
         let getValue = key => state.data |> Form.get(key);
         let handleSubmit = event => {
-          event |> ReactEventRe.Form.preventDefault;
+          event |> ReactEvent.Form.preventDefault;
           onSubmit(state.data);
         };
 

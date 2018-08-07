@@ -71,10 +71,10 @@ let make = _children => {
                            href
                            className=Styles.userItem
                            activeClassName=Styles.activeUserItem>
-                           ...<Fragment>
-                                <div className=Styles.avatar />
-                                (user##email |> ReasonReact.string)
-                              </Fragment>
+                           <Fragment>
+                             <div className=Styles.avatar />
+                             (user##email |> ReasonReact.string)
+                           </Fragment>
                          </Link>;
                        }
                      )
