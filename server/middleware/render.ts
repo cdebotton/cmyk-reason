@@ -2,14 +2,16 @@ import { renderToNodeStream } from 'react-dom/server';
 import { Context } from 'koa';
 // @ts-ignore
 import { renderStatic } from 'glamor/server';
+import { ReactElement } from 'react';
 type Renderer = (
   ctx: Context,
-) => Promise<[JSX.Element, string, number, string | undefined]>;
+) => Promise<[ReactElement<any>, string, number, string | undefined]>;
 
 function render(render: Renderer) {
   return async (ctx: Context) => {
     if (ctx.req.url !== '/graphql') {
       const [app, state, statusCode = 200, redirect] = await render(ctx);
+      // @ts-ignore
       const { html, css } = renderStatic(() => renderToNodeStream(app));
 
       if (redirect) {

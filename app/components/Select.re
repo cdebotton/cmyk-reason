@@ -24,8 +24,13 @@ module Styles = {
   let currentValue =
     Css.(
       style([
+        display(`flex),
+        flexDirection(`row),
+        flexWrap(`nowrap),
+        justifyContent(`spaceBetween),
         cursor(`pointer),
         fontSize(1. |. rem),
+        width(100. |. pct),
         padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
         border(0 |. px, none, transparent),
         focus([outline(0 |. px, none, transparent)]),
@@ -55,6 +60,7 @@ module Styles = {
         top(100. |. pct),
         margin(0 |. px),
         padding(0 |. px),
+        width(100. |. pct),
       ])
     );
 
@@ -149,6 +155,7 @@ let make =
       </Label>
       <span className=Styles.currentValue onClick=toggle>
         (label |> ReasonReact.string)
+        <FontAwesomeIcon icon=SolidIcons.faChevronDown />
       </span>
       (
         switch (state) {
