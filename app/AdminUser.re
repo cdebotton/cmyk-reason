@@ -1,3 +1,18 @@
+module Styles = {
+  let form =
+    Css.(
+      style([
+        display(grid),
+        gridTemplateColumns([1. |. fr, 1. |. fr, 1. |. fr]),
+        gridGap(1. |. rem),
+      ])
+    );
+
+  let heading = Css.(style([gridColumn(1, 4)]));
+
+  let email = Css.(style([gridColumn(1, 3)]));
+};
+
 module User = [%graphql
   {|
      query User($where: UserWhereUniqueInput!) {
@@ -12,7 +27,8 @@ module User = [%graphql
 
 module UserQuery = ReasonApollo.CreateQuery(User);
 
-module UpdateUser = [%graphql {|
+module UpdateUser = [%graphql
+  {|
   mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
     updateUser(data: $data, where: $where) {
       id
@@ -20,7 +36,8 @@ module UpdateUser = [%graphql {|
       role
     }
   }
-|}];
+|}
+];
 
 module UpdateUserMutation = ReasonApollo.CreateMutation(UpdateUser);
 
@@ -50,18 +67,14 @@ type interface = Form.interface(FormConfig.key, FormConfig.value);
 
 module UserForm = Form.Make(FormConfig);
 
-let onSubmit = (userId, mutate: UpdateUserMutation.apolloMutation, values: FormConfig.t) => {
-  let updateUser = UpdateUser.make(
-    ~data={
-      "email": values.email,
-      "role": values.role,
-    },
-    ~where={
-      "id": Some(userId),
-      "email": None
-    },
-    ()
-  );
+let onSubmit =
+    (userId, mutate: UpdateUserMutation.apolloMutation, values: FormConfig.t) => {
+  let updateUser =
+    UpdateUser.make(
+      ~data={"email": values.email, "role": values.role},
+      ~where={"id": Some(userId), "email": None},
+      (),
+    );
 
   mutate(~variables=updateUser##variables, ()) |> ignore;
 };
@@ -74,54 +87,57 @@ let make = (~userId, _children) => {
     ...component,
     render: _self => {
       let renderUserForm = ({onChange, getValue, handleSubmit}: interface) =>
-        <form onSubmit=handleSubmit>
-          <Heading level=3>
+        <form className=Styles.form onSubmit=handleSubmit>
+          <Heading className=Styles.heading level=3>
             ("Edit " ++ getValue(Email) |> ReasonReact.string)
           </Heading>
           <Input
+            className=Styles.email
             placeholder="Email"
             value=(getValue(FormConfig.Email))
             onChange=(onChange(Email))
           />
-          <select
-            value=(getValue(Role))
-            onChange=(
-              event => ReactEvent.Form.(event->target##value) |> onChange(Role) 
-            )>
-            <option value="admin"> ("Admin" |> ReasonReact.string) </option>
-            <option value="editor"> ("Editor" |> ReasonReact.string) </option>
-            <option value="user"> ("User" |> ReasonReact.string) </option>
-            <option value="unauthorized">
-              ("Unauthorized" |> ReasonReact.string)
-            </option>
-          </select>
+          <Select
+            placeholder="Role"
+            value=(getValue(FormConfig.Role))
+            onChange=(onChange(Role))
+            options=[
+              {label: "Admin", value: `ADMIN |> Role.roleToString},
+              {label: "Editor", value: `EDITOR |> Role.roleToString},
+              {label: "User", value: `USER |> Role.roleToString},
+              {
+                label: "Unauthorized",
+                value: `UNAUTHORIZED |> Role.roleToString,
+              },
+            ]
+          />
           <Button type_=Submit> ("Save" |> ReasonReact.string) </Button>
         </form>;
 
-
       <UserQuery variables=userQuery##variables>
         ...(
-              ({result}) =>
-                switch (result) {
-                | Loading => <Loader />
-                | Error(error) => <ApolloError error />
-                | Data(response) =>
-                  <div key=response##user##id>
-                    <UpdateUserMutation>
-                      ...((mutate, _) => 
-                        <UserForm
-                          initialValues={
-                            email: response##user##email,
-                            role: response##user##role,
-                          }
-                          onSubmit=onSubmit(response##user##id, mutate)>
-                          ...renderUserForm
-                        </UserForm>
-                      )
-                    </UpdateUserMutation>
-                  </div>
-                }
-            )
+             ({result}) =>
+               switch (result) {
+               | Loading => <Loader />
+               | Error(error) => <ApolloError error />
+               | Data(response) =>
+                 <div key=response##user##id>
+                   <UpdateUserMutation>
+                     ...(
+                          (mutate, _) =>
+                            <UserForm
+                              initialValues={
+                                email: response##user##email,
+                                role: response##user##role,
+                              }
+                              onSubmit=(onSubmit(response##user##id, mutate))>
+                              ...renderUserForm
+                            </UserForm>
+                        )
+                   </UpdateUserMutation>
+                 </div>
+               }
+           )
       </UserQuery>;
     },
   };

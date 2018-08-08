@@ -1,6 +1,12 @@
 module Styles = {
   let layout =
-    Css.(style([display(grid), gridTemplateColumns([1. |. fr, 1. |. fr])]));
+    Css.(
+      style([
+        display(grid),
+        gridTemplateColumns([1. |. fr, 1. |. fr]),
+        gridGap(1. |. rem),
+      ])
+    );
 
   let userItem =
     Css.(
@@ -75,11 +81,13 @@ let make = _children => {
                            <Fragment>
                              <div className=Styles.avatar />
                              (user##email |> ReasonReact.string)
-                             (
-                               user##role
-                               |> Role.roleToString
-                               |> ReasonReact.string
-                             )
+                             <Badge>
+                               (
+                                 user##role
+                                 |> Role.roleToString
+                                 |> ReasonReact.string
+                               )
+                             </Badge>
                            </Fragment>
                          </Link>;
                        }

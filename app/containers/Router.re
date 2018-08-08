@@ -43,12 +43,7 @@ module Browser = {
     reducer: (action, state) =>
       switch (action) {
       | Push(url) =>
-        ReasonReact.Update({
-          ...state,
-          path: url.path,
-          hash: url.hash,
-          search: url.search,
-        })
+        Update({...state, path: url.path, hash: url.hash, search: url.search})
       },
     didMount: ({send, onUnmount}) => {
       let urlWatcher = ReasonReact.Router.watchUrl(url => Push(url) |> send);
