@@ -79,7 +79,7 @@ let onSubmit =
   mutate(~variables=updateUser##variables, ()) |> ignore;
 };
 
-let component = ReasonReact.statelessComponent("AdminUser");
+let component = ReasonReact.statelessComponent("AdminUpdateUser");
 
 let make = (~userId, _children) => {
   let userQuery = User.make(~where={"id": Some(userId), "email": None}, ());
@@ -124,15 +124,24 @@ let make = (~userId, _children) => {
                  <div key=response##user##id>
                    <UpdateUserMutation>
                      ...(
-                          (mutate, _) =>
-                            <UserForm
-                              initialValues={
-                                email: response##user##email,
-                                role: response##user##role,
-                              }
-                              onSubmit=(onSubmit(response##user##id, mutate))>
-                              ...renderUserForm
-                            </UserForm>
+                          (mutate, {result}) =>
+                            switch (result) {
+                            | Data(_response) =>
+                              <Redirect to_="/admin/users" />
+                            | Error(_)
+                            | Loading
+                            | NotCalled =>
+                              <UserForm
+                                initialValues={
+                                  email: response##user##email,
+                                  role: response##user##role,
+                                }
+                                onSubmit=(
+                                  onSubmit(response##user##id, mutate)
+                                )>
+                                ...renderUserForm
+                              </UserForm>
+                            }
                         )
                    </UpdateUserMutation>
                  </div>

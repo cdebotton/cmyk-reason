@@ -6,6 +6,7 @@ module Styles = {
       style([
         position(relative),
         display(`flex),
+        userSelect(none),
         before([
           `declaration(("content", " ")),
           position(absolute),
@@ -61,6 +62,14 @@ module Styles = {
         margin(0 |. px),
         padding(0 |. px),
         width(100. |. pct),
+        borderRadius(5 |. px),
+        overflow(hidden),
+        boxShadow(
+          ~x=0 |. px,
+          ~y=2 |. px,
+          ~blur=4 |. px,
+          rgba(0, 0, 0, 0.25),
+        ),
       ])
     );
 
@@ -70,7 +79,7 @@ module Styles = {
         cursor(`pointer),
         fontSize(1. |. rem),
         padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
-        hover([backgroundColor(red)]),
+        hover([backgroundColor(hsla(200, 25, 25, 0.05))]),
       ])
     );
 };
@@ -155,7 +164,14 @@ let make =
       </Label>
       <span className=Styles.currentValue onClick=toggle>
         (label |> ReasonReact.string)
-        <FontAwesomeIcon icon=SolidIcons.faChevronDown />
+        {
+          let icon =
+            switch (state) {
+            | Open => SolidIcons.faChevronUp
+            | Closed => SolidIcons.faChevronDown
+            };
+          <FontAwesomeIcon icon size=ExtraSmall />;
+        }
       </span>
       (
         switch (state) {
