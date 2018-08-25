@@ -7,10 +7,10 @@ module Styles = {
       backgroundColor(white),
       width(px(w)),
       height(px(h)),
-      padding(rem(0.5)),
       borderRadius(px(3)),
       left(px(x)),
       top(px(y)),
+      overflowY(auto),
       boxShadow(
         ~x=rem(0.125),
         ~y=rem(0.125),

@@ -57,6 +57,7 @@ module Styles = {
       style([
         position(absolute),
         listStyleType(none),
+        backgroundColor(white),
         paddingTop(0.5 |> rem),
         top(100. |> pct),
         margin(0 |> px),
@@ -64,6 +65,7 @@ module Styles = {
         width(100. |> pct),
         borderRadius(5 |> px),
         overflow(hidden),
+        zIndex(100),
         boxShadow(
           ~x=0 |> px,
           ~y=2 |> px,
