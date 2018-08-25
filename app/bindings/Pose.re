@@ -1,9 +1,9 @@
 type reactPose;
 
-[@bs.module "react-pose"] external pose : reactPose = "default";
-[@bs.send] external div : (reactPose, 'a) => ReasonReact.reactClass = "";
-[@bs.send] external span : (reactPose, 'a) => ReasonReact.reactClass = "";
-[@bs.send] external label : (reactPose, 'a) => ReasonReact.reactClass = "";
+[@bs.module "react-pose"] external pose: reactPose = "default";
+[@bs.send] external div: (reactPose, 'a) => ReasonReact.reactClass = "";
+[@bs.send] external span: (reactPose, 'a) => ReasonReact.reactClass = "";
+[@bs.send] external label: (reactPose, 'a) => ReasonReact.reactClass = "";
 
 type elementType =
   | Div
@@ -22,9 +22,9 @@ module type Config = {
 module Make = (C: Config) => {
   let reactClass =
     switch (C.element) {
-    | Div => pose |. div(C.config)
-    | Span => pose |. span(C.config)
-    | Label => pose |. label(C.config)
+    | Div => pose->(div(C.config))
+    | Span => pose->span(C.config)
+    | Label => pose->label(C.config)
     };
 
   let make = (~pose, ~className=?, children) =>

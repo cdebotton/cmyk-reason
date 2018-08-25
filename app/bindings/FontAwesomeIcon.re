@@ -67,7 +67,7 @@ let getRotation = rotation =>
   };
 
 [@bs.module "@fortawesome/react-fontawesome"]
-external reactClass : ReasonReact.reactClass = "FontAwesomeIcon";
+external reactClass: ReasonReact.reactClass = "FontAwesomeIcon";
 
 let make =
     (

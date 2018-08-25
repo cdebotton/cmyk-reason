@@ -6,22 +6,22 @@ module Styles = {
 
   let page =
     style([
-      width(100. |. vw),
-      minHeight(100. |. vh),
+      width(100. |> vw),
+      minHeight(100. |> vh),
       overflow(auto),
       display(grid),
       alignContent(center),
       justifyContent(center),
     ]);
 
-  let title = style([paddingLeft(0.75 |. rem)]);
+  let title = style([paddingLeft(0.75 |> rem)]);
 
   let form =
     style([
-      maxWidth(44. |. rem),
+      maxWidth(44. |> rem),
       display(grid),
-      gridGap(1. |. rem),
-      gridTemplateColumns([1. |. fr, 1. |. fr]),
+      gridGap(1. |> rem),
+      gridTemplateColumns([1. |> fr, 1. |> fr]),
       gridTemplateRows([minContent, minContent, minContent]),
     ]);
 
@@ -56,7 +56,7 @@ module Authenticate = [%graphql
 module AuthenticateMutation = ReasonApollo.CreateMutation(Authenticate);
 
 [@bs.send]
-external resetStore : (ApolloClient.generatedApolloClient, unit) => unit = "";
+external resetStore: (ApolloClient.generatedApolloClient, unit) => unit = "";
 
 /**
  * ⌨️ Form configuration ⌨️
@@ -97,7 +97,7 @@ let onSubmit =
 
   Js.Promise.(
     mutate(~variables=authenticate##variables, ())
-    |> then_(_data => apolloClient |. resetStore() |> resolve)
+    |> then_(_data => apolloClient->(resetStore()) |> resolve)
     |> ignore
   );
 };
@@ -114,7 +114,7 @@ module LoginContainer = {
     ...component,
     render: _self =>
       <SessionQuery>
-        ...(
+        ...{
              ({result}) =>
                switch (result) {
                | Loading => ReasonReact.null
@@ -126,15 +126,15 @@ module LoginContainer = {
                    ...(
                         apolloClient =>
                           <AuthenticateMutation>
-                            ...(
+                            ...{
                                  (mutate, _renderPropObj) =>
                                    children(mutate, apolloClient)
-                               )
+                               }
                           </AuthenticateMutation>
                       )
                  </ApolloConsumer>
                }
-           )
+           }
       </SessionQuery>,
   };
 };
@@ -144,41 +144,41 @@ let make = _children => {
   render: _self =>
     <div className=Styles.page>
       <LoginContainer>
-        ...(
+        ...{
              (mutate, apolloClient) =>
                <LoginForm
                  initialValues={email: "", password: ""}
-                 onSubmit=(onSubmit(mutate, apolloClient))>
-                 ...(
+                 onSubmit={onSubmit(mutate, apolloClient)}>
+                 ...{
                       ({getValue, onChange, handleSubmit}) =>
                         <form className=Styles.form onSubmit=handleSubmit>
                           <Heading className=Styles.title level=2>
-                            ("Login" |> ReasonReact.string)
+                            {"Login" |> ReasonReact.string}
                           </Heading>
                           <Input
                             className=Styles.inputEmail
                             placeholder="Email"
-                            value=(getValue(Email))
-                            onChange=(onChange(Email))
+                            value={getValue(Email)}
+                            onChange={onChange(Email)}
                           />
                           <Input
                             className=Styles.inputPassword
                             placeholder="Password"
                             type_=Password
-                            value=(getValue(Password))
+                            value={getValue(Password)}
                             name="password"
-                            onChange=(onChange(Password))
+                            onChange={onChange(Password)}
                           />
                           <Button
                             format=Neutral
                             className=Styles.loginButton
                             type_=Submit>
-                            ("Login" |> ReasonReact.string)
+                            {"Login" |> ReasonReact.string}
                           </Button>
                         </form>
-                    )
+                    }
                </LoginForm>
-           )
+           }
       </LoginContainer>
     </div>,
 };

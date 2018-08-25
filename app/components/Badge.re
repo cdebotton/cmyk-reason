@@ -13,16 +13,16 @@ module Styles = {
       };
     Css.(
       style([
-        borderRadius(3 |. px),
+        borderRadius(3 |> px),
         `declaration(("backgroundColor", bgColor)),
         fontWeight(600),
         color(white),
-        fontSize(0.75 |. rem),
-        padding(0.25 |. rem),
+        fontSize(0.75 |> rem),
+        padding(0.25 |> rem),
         boxShadow(
-          ~x=0 |. px,
-          ~y=1 |. px,
-          ~blur=2 |. px,
+          ~x=0 |> px,
+          ~y=1 |> px,
+          ~blur=2 |> px,
           hsla(0, 0, 0, 0.45),
         ),
       ])
@@ -35,11 +35,11 @@ let make = (~className=?, ~format=Neutral, children) => {
   ...component,
   render: _self =>
     <span
-      className=(
+      className={
         [Some(Styles.badge(format)), className]
         |> Utils.unwrapOptionalList
         |> Utils.joinList(~sep=" ")
-      )>
+      }>
       ...children
     </span>,
 };

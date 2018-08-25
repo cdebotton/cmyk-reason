@@ -11,9 +11,9 @@ module Styles = {
           `declaration(("content", " ")),
           position(absolute),
           display(block),
-          top(100. |. pct),
-          width(100. |. pct),
-          height(2 |. px),
+          top(100. |> pct),
+          width(100. |> pct),
+          height(2 |> px),
           `declaration((
             "backgroundImage",
             {j|linear-gradient(to right, $colors)|j},
@@ -30,11 +30,11 @@ module Styles = {
         flexWrap(`nowrap),
         justifyContent(`spaceBetween),
         cursor(`pointer),
-        fontSize(1. |. rem),
-        width(100. |. pct),
-        padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
-        border(0 |. px, none, transparent),
-        focus([outline(0 |. px, none, transparent)]),
+        fontSize(1. |> rem),
+        width(100. |> pct),
+        padding2(~v=0.5 |> rem, ~h=0.75 |> rem),
+        border(0 |> px, none, transparent),
+        focus([outline(0 |> px, none, transparent)]),
       ])
     );
 
@@ -44,10 +44,10 @@ module Styles = {
         position(absolute),
         pointerEvents(none),
         userSelect(none),
-        fontSize(0.6 |. rem),
+        fontSize(0.6 |> rem),
         fontWeight(600),
         textTransform(uppercase),
-        left(0.75 |. rem),
+        left(0.75 |> rem),
         opacity(0.),
       ])
     );
@@ -57,17 +57,17 @@ module Styles = {
       style([
         position(absolute),
         listStyleType(none),
-        paddingTop(0.5 |. rem),
-        top(100. |. pct),
-        margin(0 |. px),
-        padding(0 |. px),
-        width(100. |. pct),
-        borderRadius(5 |. px),
+        paddingTop(0.5 |> rem),
+        top(100. |> pct),
+        margin(0 |> px),
+        padding(0 |> px),
+        width(100. |> pct),
+        borderRadius(5 |> px),
         overflow(hidden),
         boxShadow(
-          ~x=0 |. px,
-          ~y=2 |. px,
-          ~blur=4 |. px,
+          ~x=0 |> px,
+          ~y=2 |> px,
+          ~blur=4 |> px,
           rgba(0, 0, 0, 0.25),
         ),
       ])
@@ -77,8 +77,8 @@ module Styles = {
     Css.(
       style([
         cursor(`pointer),
-        fontSize(1. |. rem),
-        padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
+        fontSize(1. |> rem),
+        padding2(~v=0.5 |> rem, ~h=0.75 |> rem),
         hover([backgroundColor(hsla(200, 25, 25, 0.05))]),
       ])
     );
@@ -135,7 +135,7 @@ let make =
              send(Toggle(Closed));
            };
            <li key={j|OPTION_$value|j} onClick className=Styles.item>
-             (label |> ReasonReact.string)
+             {label |> ReasonReact.string}
            </li>;
          })
       |> Array.of_list;
@@ -147,23 +147,23 @@ let make =
       };
 
     <div
-      className=(
+      className={
         [Some(Styles.container), className]
         |> Utils.unwrapOptionalList
         |> Utils.joinList(~sep=" ")
-      )>
+      }>
       <Label
         className=Styles.label
-        pose=(
+        pose={
           switch (value) {
           | None => Hidden
           | _ => Visible
           }
-        )>
-        (placeholder |> ReasonReact.string)
+        }>
+        {placeholder |> ReasonReact.string}
       </Label>
       <span className=Styles.currentValue onClick=toggle>
-        (label |> ReasonReact.string)
+        {label |> ReasonReact.string}
         {
           let icon =
             switch (state) {
@@ -173,12 +173,12 @@ let make =
           <FontAwesomeIcon icon size=ExtraSmall />;
         }
       </span>
-      (
+      {
         switch (state) {
         | Open => <ul className=Styles.dropdown> ...selections </ul>
         | Closed => ReasonReact.null
         }
-      )
+      }
     </div>;
   },
 };

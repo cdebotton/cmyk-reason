@@ -11,9 +11,9 @@ module Styles = {
         `declaration(("content", " ")),
         position(absolute),
         display(block),
-        top(100. |. pct),
-        width(100. |. pct),
-        height(2 |. px),
+        top(100. |> pct),
+        width(100. |> pct),
+        height(2 |> px),
         `declaration((
           "backgroundImage",
           {j|linear-gradient(to right, $colors)|j},
@@ -26,19 +26,19 @@ module Styles = {
       position(absolute),
       pointerEvents(none),
       userSelect(none),
-      fontSize(0.6 |. rem),
+      fontSize(0.6 |> rem),
       fontWeight(600),
       textTransform(uppercase),
-      left(0.75 |. rem),
+      left(0.75 |> rem),
       opacity(0.),
     ]);
 
   let input =
     style([
-      fontSize(1. |. rem),
-      padding2(~v=0.5 |. rem, ~h=0.75 |. rem),
-      border(0 |. px, none, transparent),
-      focus([outline(0 |. px, none, transparent)]),
+      fontSize(1. |> rem),
+      padding2(~v=0.5 |> rem, ~h=0.75 |> rem),
+      border(0 |> px, none, transparent),
+      focus([outline(0 |> px, none, transparent)]),
     ]);
 };
 
@@ -73,28 +73,28 @@ let make =
   ...component,
   render: _self =>
     <span
-      className=(
+      className={
         [Some(Styles.main), className]
         |> Utils.unwrapOptionalList
         |> Utils.joinList(~sep=" ")
-      )>
+      }>
       <Label
         className=Styles.label
-        pose=(
+        pose={
           switch (value) {
           | "" => Hidden
           | _ => Visible
           }
-        )>
-        (placeholder |> ReasonReact.string)
+        }>
+        {placeholder |> ReasonReact.string}
       </Label>
       <input
         className=Styles.input
         ?name
         value
-        onChange=(event => ReactEvent.Form.(event->target##value) |> onChange)
+        onChange={event => ReactEvent.Form.(event->target##value) |> onChange}
         placeholder
-        type_=(inputType(type_))
+        type_={inputType(type_)}
       />
     </span>,
 };

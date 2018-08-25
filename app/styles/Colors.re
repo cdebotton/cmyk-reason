@@ -54,4 +54,4 @@ let getColorGroup = color =>
   | Light => light
   };
 
-let getColor = (color, at) => color |> getColorGroup |. List.nth(at);
+let getColor = (color, at) => List.((color |> getColorGroup)->nth(at));

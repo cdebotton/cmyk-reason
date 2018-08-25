@@ -3,8 +3,8 @@ module Styles = {
   let layout =
     style([
       display(grid),
-      gridTemplateColumns([1. |. fr, 1. |. fr]),
-      gridGap(1. |. rem),
+      gridTemplateColumns([1. |> fr, 1. |> fr]),
+      gridGap(1. |> rem),
     ]);
 
   let userItem =
@@ -12,18 +12,18 @@ module Styles = {
       display(`flex),
       alignItems(center),
       display(block),
-      padding(1. |. rem),
-      borderBottom(1 |. px, solid, hsla(200, 25, 25, 0.25)),
+      padding(1. |> rem),
+      borderBottom(1 |> px, solid, hsla(200, 25, 25, 0.25)),
       hover([backgroundColor(hsla(200, 25, 25, 0.05))]),
     ]);
 
   let avatar =
     style([
-      width(3. |. rem),
-      height(3. |. rem),
-      borderRadius(50. |. pct),
+      width(3. |> rem),
+      height(3. |> rem),
+      borderRadius(50. |> pct),
       backgroundColor(black),
-      marginRight(1. |. rem),
+      marginRight(1. |> rem),
     ]);
 
   let badge = style([marginLeft(auto)]);
@@ -50,7 +50,7 @@ let make = _children => {
   ...component,
   render: _self =>
     <UsersQuery>
-      ...(
+      ...{
            ({result}) =>
              switch (result) {
              | Loading => <Loader />
@@ -58,7 +58,7 @@ let make = _children => {
              | Data(response) =>
                <div className=Styles.layout>
                  <div>
-                   <Heading level=2> ("Users" |> ReasonReact.string) </Heading>
+                   <Heading level=2> {"Users" |> ReasonReact.string} </Heading>
                    <Popover label="Create a new user">
                      <AdminCreateUser />
                    </Popover>
@@ -80,20 +80,20 @@ let make = _children => {
                            activeClassName=Styles.activeUserItem>
                            <Fragment>
                              <div className=Styles.avatar />
-                             (user##email |> ReasonReact.string)
+                             {user##email |> ReasonReact.string}
                              <Badge
                                className=Styles.badge
-                               format=(
+                               format={
                                  switch (user##role) {
                                  | `UNAUTHORIZED => Negative
                                  | _ => Neutral
                                  }
-                               )>
-                               (
+                               }>
+                               {
                                  user##role
                                  |> Role.roleToString
                                  |> ReasonReact.string
-                               )
+                               }
                              </Badge>
                            </Fragment>
                          </Link>;
@@ -113,6 +113,6 @@ let make = _children => {
                  </Router.Consumer>
                </div>
              }
-         )
+         }
     </UsersQuery>,
 };

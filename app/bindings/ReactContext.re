@@ -1,7 +1,11 @@
 [@bs.module "react"]
-external createContext : 'a => Js.Dict.t(ReasonReact.reactClass) = "";
+external createContext: 'a => Js.Dict.t(ReasonReact.reactClass) = "";
 
-module type Configuration = {type t; let value: t; let debugName: string;};
+module type Configuration = {
+  type t;
+  let value: t;
+  let debugName: string;
+};
 
 module Make = (C: Configuration) => {
   let context = createContext(C.value);

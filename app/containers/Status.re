@@ -4,14 +4,14 @@ let make = (~code, children) => {
   ...component,
   render: _self =>
     <Router.Consumer>
-      ...(
+      ...{
            route =>
              switch (route.staticContext) {
              | None => children
              | Some(context) =>
-               context |. Router.statusCodeSet(code);
+               code |> Router.(context->statusCodeSet);
                children;
              }
-         )
+         }
     </Router.Consumer>,
 };

@@ -25,7 +25,7 @@ let make =
       children,
     ) => {
   let onClick = event => {
-    event |> ReactEventRe.Mouse.preventDefault;
+    ReactEvent.Mouse.(event->preventDefault);
     href |> ReasonReact.Router.push;
   };
 
@@ -33,7 +33,7 @@ let make =
     ...component,
     render: _self =>
       <Router.Consumer>
-        ...(
+        ...{
              route => {
                let active =
                  matchPartialPath(
@@ -57,7 +57,7 @@ let make =
                  );
                <a href onClick className> ...children </a>;
              }
-           )
+           }
       </Router.Consumer>,
   };
 };

@@ -25,13 +25,13 @@ module Styles = {
     let textColor = fgColor(1);
 
     style([
-      borderRadius(3 |. px),
-      fontSize(0.75 |. rem),
-      padding2(~v=0.5 |. rem, ~h=0.8 |. rem),
+      borderRadius(3 |> px),
+      fontSize(0.75 |> rem),
+      padding2(~v=0.5 |> rem, ~h=0.8 |> rem),
       border(0 |> px, none, transparent),
       `declaration(("color", textColor)),
       cursor(`pointer),
-      boxShadow(~x=0 |. px, ~y=1 |. px, ~blur=2 |. px, hsla(0, 0, 0, 0.45)),
+      boxShadow(~x=0 |> px, ~y=1 |> px, ~blur=2 |> px, hsla(0, 0, 0, 0.45)),
       `declaration((
         "backgroundImage",
         {j|linear-gradient(to bottom right, $buttonBackgroundColors)|j},

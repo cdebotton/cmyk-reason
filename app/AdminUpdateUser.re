@@ -3,8 +3,8 @@ module Styles = {
     Css.(
       style([
         display(grid),
-        gridTemplateColumns([1. |. fr, 1. |. fr, 1. |. fr]),
-        gridGap(1. |. rem),
+        gridTemplateColumns([1. |> fr, 1. |> fr, 1. |> fr]),
+        gridGap(1. |> rem),
       ])
     );
 
@@ -22,21 +22,21 @@ module User = [%graphql
          role
        }
      }
-     |}
+  |}
 ];
 
 module UserQuery = ReasonApollo.CreateQuery(User);
 
 module UpdateUser = [%graphql
   {|
-  mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
-    updateUser(data: $data, where: $where) {
-      id
-      email
-      role
+    mutation UpdateUser($data: UserUpdateInput!, $where: UserWhereUniqueInput!) {
+      updateUser(data: $data, where: $where) {
+        id
+        email
+        role
+      }
     }
-  }
-|}
+  |}
 ];
 
 module UpdateUserMutation = ReasonApollo.CreateMutation(UpdateUser);
@@ -89,18 +89,18 @@ let make = (~userId, _children) => {
       let renderUserForm = ({onChange, getValue, handleSubmit}: interface) =>
         <form className=Styles.form onSubmit=handleSubmit>
           <Heading className=Styles.heading level=3>
-            ("Edit " ++ getValue(Email) |> ReasonReact.string)
+            {"Edit " ++ getValue(Email) |> ReasonReact.string}
           </Heading>
           <Input
             className=Styles.email
             placeholder="Email"
-            value=(getValue(FormConfig.Email))
-            onChange=(onChange(Email))
+            value={getValue(FormConfig.Email)}
+            onChange={onChange(Email)}
           />
           <Select
             placeholder="Role"
-            value=(getValue(FormConfig.Role))
-            onChange=(onChange(Role))
+            value={getValue(FormConfig.Role)}
+            onChange={onChange(Role)}
             options=[
               {label: "Admin", value: `ADMIN |> Role.roleToString},
               {label: "Editor", value: `EDITOR |> Role.roleToString},
@@ -111,11 +111,11 @@ let make = (~userId, _children) => {
               },
             ]
           />
-          <Button type_=Submit> ("Save" |> ReasonReact.string) </Button>
+          <Button type_=Submit> {"Save" |> ReasonReact.string} </Button>
         </form>;
 
       <UserQuery variables=userQuery##variables>
-        ...(
+        ...{
              ({result}) =>
                switch (result) {
                | Loading => <Loader />
@@ -136,9 +136,9 @@ let make = (~userId, _children) => {
                                   email: response##user##email,
                                   role: response##user##role,
                                 }
-                                onSubmit=(
+                                onSubmit={
                                   onSubmit(response##user##id, mutate)
-                                )>
+                                }>
                                 ...renderUserForm
                               </UserForm>
                             }
@@ -146,7 +146,7 @@ let make = (~userId, _children) => {
                    </UpdateUserMutation>
                  </div>
                }
-           )
+           }
       </UserQuery>;
     },
   };

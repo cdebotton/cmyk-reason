@@ -5,14 +5,14 @@ let make = (~to_, _children) => {
   didMount: _self => ReasonReact.Router.push(to_) |> ignore,
   render: _self =>
     <Router.Consumer>
-      ...(
+      ...{
            ({staticContext}) => {
              switch (staticContext) {
              | None => ignore()
-             | Some(context) => context |. Router.urlSet(Some(to_))
+             | Some(context) => Router.(context->urlSet(Some(to_)))
              };
              ReasonReact.null;
            }
-         )
+         }
     </Router.Consumer>,
 };

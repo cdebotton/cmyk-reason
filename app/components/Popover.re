@@ -1,47 +1,62 @@
+module Styles = {
+  open Css;
+
+  let modal = style([position(absolute), top(0 |> px), left(0 |> px)]);
+};
+
 type state =
-  | Open
+  | Opened
   | Closed;
 
 type action =
-  | Toggle(state);
+  | Open
+  | Close;
 
+type reactRef = Js.nullable(ReasonReact.reactRef) => unit;
+
+[@bs.module "react"] external createRef: unit => reactRef = "";
+[@bs.get] external current: reactRef => Dom.element = "";
 let component = ReasonReact.reducerComponent("Popover");
 
-let make = (~label, children) => {
-  let buttonRef: ref(Js.nullable(ReasonReact.reactRef)) =
-    ref(Js.Nullable.null);
+let make = children => {
+  let buttonRef = createRef();
+
   {
     ...component,
     initialState: () => Closed,
-    didMount: _self =>
-      switch (Js.Nullable.toOption(buttonRef^)) {
-      | Some(button) =>
-        let element = button |> ReasonReact.refToJsObj;
-        element |> Js.log;
-      | None => ()
-      },
     reducer: (action, _state) =>
       switch (action) {
-      | Toggle(state) => Update(state)
+      | Open => Update(Opened)
+      | Close => Update(Closed)
       },
-    render: ({send, state}) => {
+    render: ({state, send}) => {
       let onClick = _event =>
         switch (state) {
-        | Open => send(Toggle(Closed))
-        | Closed => send(Toggle(Open))
+        | Opened => send(Close)
+        | Closed => send(Open)
+        };
+      let portal =
+        switch (ReactDOMRe._getElementById("portal")) {
+        | exception _exn => None
+        | None => None
+        | Some(element) => Some(element)
         };
 
-      let popover =
-        switch (state) {
-        | Closed => ReasonReact.null
-        | Open => <div> ...children </div>
-        };
+      let test = buttonRef->current;
+      Js.log(test);
 
       <Fragment>
-        <Button ref=(c => buttonRef := c) format=Neutral onClick>
-          (label |> ReasonReact.string)
-        </Button>
-        popover
+        <Button ref=buttonRef onClick> {"Open" |> ReasonReact.string} </Button>
+        {
+          switch (state, portal) {
+          | (Opened, Some(portal)) =>
+            ReactDOMRe.createPortal(
+              <div className=Styles.modal> children </div>,
+              portal,
+            )
+          | (_, _) => ReasonReact.null
+          }
+        }
       </Fragment>;
     },
   };
