@@ -60,6 +60,7 @@ let make =
     (
       ~type_=Button,
       ~className=?,
+      ~innerRef=?,
       ~format: Colors.t=Neutral,
       ~onClick=defaultOnClick,
       children,
@@ -75,6 +76,7 @@ let make =
 
   {
     ...component,
-    render: _self => <button className onClick type_> ...children </button>,
+    render: _self =>
+      <button className onClick type_ ref=?innerRef> ...children </button>,
   };
 };

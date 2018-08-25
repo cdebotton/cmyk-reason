@@ -1,5 +1,5 @@
 [@bs.val]
-external apolloState : ApolloInMemoryCache.inMemoryCacheRestoreData =
+external apolloState: ApolloInMemoryCache.inMemoryCacheRestoreData =
   "window.__APOLLO_STATE__";
 
 let link =
