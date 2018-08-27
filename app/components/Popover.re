@@ -18,6 +18,27 @@ module Styles = {
         hsla(0, 0, 0, 0.5),
       ),
     ]);
+
+  let bgColor = Colors.getColor(Neutral);
+  let fgColor = Colors.getColor(Light);
+  let buttonBackgroundColors = [bgColor(0), bgColor(3)] |> Utils.joinList;
+  let textColor = fgColor(1);
+  let heading =
+    style([
+      color(white),
+      margin(px(0)),
+      width(pct(100.)),
+      height(rem(3.)),
+      display(`flex),
+      flexDirection(row),
+      flexWrap(nowrap),
+      alignItems(center),
+      padding2(~v=rem(0.), ~h=rem(1.)),
+      `declaration((
+        "backgroundImage",
+        {j|linear-gradient(to bottom right, $buttonBackgroundColors)|j},
+      )),
+    ]);
 };
 
 type state =
@@ -119,7 +140,12 @@ let getModalPosition = (~size as (w, h), ~distance, button) =>
     }
   );
 
-let make = (~label, ~size=(600, 400), ~distance=12, children) => {
+type interface = {
+  open_: unit => unit,
+  close: unit => unit,
+};
+
+let make = (~title=?, ~label, ~size=(600, 400), ~distance=12, children) => {
   let buttonRef: ref(option(Dom.element)) = ref(None);
 
   {
@@ -158,12 +184,23 @@ let make = (~label, ~size=(600, 400), ~distance=12, children) => {
 
             switch (state, portal, position) {
             | (Opened, Some(portal), Some(position)) =>
+              let open_ = () => Open |> send;
+              let close = () => Close |> send;
               ReactDOMRe.createPortal(
                 <div className={Styles.modal(~size, ~position)}>
-                  ...children
+                  {
+                    switch (title) {
+                    | None => ReasonReact.null
+                    | Some(title) =>
+                      <Heading className=Styles.heading level=3>
+                        {title |> ReasonReact.string}
+                      </Heading>
+                    }
+                  }
+                  {children({open_, close})}
                 </div>,
                 portal,
-              )
+              );
             | (_, _, _) => ReasonReact.null
             };
           }

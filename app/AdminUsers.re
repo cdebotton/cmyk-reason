@@ -59,8 +59,14 @@ let make = _children => {
                <div className=Styles.layout>
                  <div>
                    <Heading level=2> {"Users" |> ReasonReact.string} </Heading>
-                   <Popover label="Create a new user">
-                     <AdminCreateUser />
+                   <Popover
+                     size=(400, 300)
+                     title="New user"
+                     label="Create a new user">
+                     ...(
+                          ({close}) =>
+                            <AdminCreateUser onSave=close onCancel=close />
+                        )
                    </Popover>
                    <ItemList
                      items=response##users

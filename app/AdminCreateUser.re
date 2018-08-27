@@ -65,70 +65,78 @@ module CreateUserForm = Form.Make(FormConfig);
 
 let component = ReasonReact.statelessComponent("AdminCreateUser");
 
-let make = _children => {
-  ...component,
-  render: _self =>
-    <CreateUserForm
-      initialValues={
-        email: "",
-        password: "",
-        firstname: "",
-        lastname: "",
-        role: `UNAUTHORIZED,
-      }
-      onSubmit={_ => Js.log("WHOA")}>
-      ...{
-           ({getValue, onChange}) =>
-             <div className=Styles.container>
-               <form className=Styles.form>
-                 <Input
-                   className=Styles.email
-                   placeholder="Email"
-                   value={getValue(Email)}
-                   onChange={onChange(Email)}
-                 />
-                 <Input
-                   className=Styles.password
-                   type_=Password
-                   placeholder="Password"
-                   value={getValue(Password)}
-                   onChange={onChange(Password)}
-                 />
-                 <Select
-                   className=Styles.role
-                   placeholder="Role"
-                   value={getValue(FormConfig.Role)}
-                   onChange={onChange(Role)}
-                   options=[
-                     {label: "Admin", value: `ADMIN |> Role.roleToString},
-                     {label: "Editor", value: `EDITOR |> Role.roleToString},
-                     {label: "User", value: `USER |> Role.roleToString},
-                     {
-                       label: "Unauthorized",
-                       value: `UNAUTHORIZED |> Role.roleToString,
-                     },
-                   ]
-                 />
-                 <Input
-                   className=Styles.firstname
-                   placeholder="First name"
-                   value={getValue(Firstname)}
-                   onChange={onChange(Firstname)}
-                 />
-                 <Input
-                   className=Styles.lastname
-                   placeholder="Last name"
-                   value={getValue(Lastname)}
-                   onChange={onChange(Lastname)}
-                 />
-                 <Button className=Styles.save>
-                   {"Create" |> ReasonReact.string}
-                 </Button>
-                 <Button className=Styles.cancel type_=Reset>
-                   {"Cancel" |> ReasonReact.string}
-                 </Button>
-               </form>
-             </div>
-         }
-    </CreateUserForm>,
+let make = (~onSave, ~onCancel, _children) => {
+  let handleCancel = event => {
+    event->ReactEvent.Mouse.preventDefault;
+    onCancel();
+  };
+
+  {
+    ...component,
+    render: _self =>
+      <CreateUserForm
+        initialValues={
+          email: "",
+          password: "",
+          firstname: "",
+          lastname: "",
+          role: `UNAUTHORIZED,
+        }
+        onSubmit={_ => onSave()}>
+        ...{
+             ({getValue, onChange, handleSubmit}) =>
+               <div className=Styles.container>
+                 <form className=Styles.form onSubmit=handleSubmit>
+                   <Input
+                     className=Styles.email
+                     placeholder="Email"
+                     value={getValue(Email)}
+                     onChange={onChange(Email)}
+                   />
+                   <Input
+                     className=Styles.password
+                     type_=Password
+                     placeholder="Password"
+                     value={getValue(Password)}
+                     onChange={onChange(Password)}
+                   />
+                   <Select
+                     className=Styles.role
+                     placeholder="Role"
+                     value={getValue(FormConfig.Role)}
+                     onChange={onChange(Role)}
+                     options=[
+                       {label: "Admin", value: `ADMIN |> Role.roleToString},
+                       {label: "Editor", value: `EDITOR |> Role.roleToString},
+                       {label: "User", value: `USER |> Role.roleToString},
+                       {
+                         label: "Unauthorized",
+                         value: `UNAUTHORIZED |> Role.roleToString,
+                       },
+                     ]
+                   />
+                   <Input
+                     className=Styles.firstname
+                     placeholder="First name"
+                     value={getValue(Firstname)}
+                     onChange={onChange(Firstname)}
+                   />
+                   <Input
+                     className=Styles.lastname
+                     placeholder="Last name"
+                     value={getValue(Lastname)}
+                     onChange={onChange(Lastname)}
+                   />
+                   <Button className=Styles.save type_=Submit>
+                     {"Create" |> ReasonReact.string}
+                   </Button>
+                   <Button
+                     className=Styles.cancel type_=Reset onClick=handleCancel>
+                     {"Cancel" |> ReasonReact.string}
+                   </Button>
+                 </form>
+               </div>
+           }
+      </CreateUserForm>,
+  };
 };
