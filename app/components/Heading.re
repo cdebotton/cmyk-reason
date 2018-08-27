@@ -1,6 +1,13 @@
 module Styles = {
   open Css;
-  let main = style([]);
+  let main =
+    style([
+      fontWeight(400),
+      fontFamily("Oswald, sans-serif"),
+      textTransform(uppercase),
+      userSelect(none),
+      cursor(`default),
+    ]);
 };
 
 let component = ReasonReact.statelessComponent("Heading");

@@ -26,6 +26,7 @@ function render(render: Renderer) {
           '<html lang="en">' +
           '<head>' +
           '<title>CMYK</title>' +
+          '<link href="https://fonts.googleapis.com/css?family=Oswald:500|Roboto:400,400i" rel="stylesheet">' +
           `<style>${css}</style>` +
           '</head>' +
           '<body>' +

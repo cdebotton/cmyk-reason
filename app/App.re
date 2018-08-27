@@ -1,7 +1,12 @@
 Css.(
   global(
     "body",
-    [margin(0. |> rem), padding(0. |> rem), fontFamily("sans-serif")],
+    [
+      margin(0. |> rem),
+      padding(0. |> rem),
+      fontFamily("sans-serif"),
+      fontFamily("Roboto, sans-serif"),
+    ],
   ),
   global("*,*::before,*::after", [boxSizing(borderBox)]),
 );

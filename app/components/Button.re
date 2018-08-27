@@ -27,6 +27,8 @@ module Styles = {
     style([
       borderRadius(3 |> px),
       fontSize(0.75 |> rem),
+      fontFamily("Oswald, sans-serif"),
+      textTransform(uppercase),
       padding2(~v=0.5 |> rem, ~h=0.8 |> rem),
       border(0 |> px, none, transparent),
       `declaration(("color", textColor)),
