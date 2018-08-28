@@ -201,7 +201,7 @@ let make = (~title=?, ~label, ~size=(600, 400), ~distance=12, children) => {
                 </div>,
                 portal,
               );
-            | (_, _, _) => ReasonReact.null
+            | _ => ReasonReact.null
             };
           }
         }
