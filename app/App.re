@@ -27,17 +27,15 @@ let component = ReasonReact.statelessComponent("App");
 let make = _children => {
   ...component,
   render: _self =>
-    <StrictMode>
-      <Router.Consumer key="Router">
-        ...{
-             route =>
-               switch (route.path) {
-               | ["admin", ..._rest] => <Admin />
-               | ["login"] => <Login />
-               | [] => <p> {"Home" |> ReasonReact.string} </p>
-               | _ => <NotFound />
-               }
-           }
-      </Router.Consumer>
-    </StrictMode>,
+    <Router.Consumer key="Router">
+      ...{
+           route =>
+             switch (route.path) {
+             | ["admin", ..._rest] => <Admin />
+             | ["login"] => <Login />
+             | [] => <p> {"Home" |> ReasonReact.string} </p>
+             | _ => <NotFound />
+             }
+         }
+    </Router.Consumer>,
 };

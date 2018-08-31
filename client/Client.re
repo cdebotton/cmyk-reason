@@ -9,11 +9,13 @@ let cache =
 
 let client = ReasonApollo.createApolloClient(~link, ~cache, ());
 
-ReactDOMRe.hydrateToElementWithId(
-  <ApolloProvider client>
-    <Router.Browser> <App /> </Router.Browser>
-  </ApolloProvider>,
-  "app",
+ReactRoot.(
+  create("app")
+  ->render(
+      <ApolloProvider client>
+        <Router.Browser> <App /> </Router.Browser>
+      </ApolloProvider>,
+    )
 );
 
 [%bs.raw {| module.hot && module.hot.accept() |}];
