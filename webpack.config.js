@@ -1,7 +1,9 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const NODE_ENV = (process.env.NODE_ENV || 'development').trim();
-const mode = NODE_ENV === 'production' ? NODE_ENV : 'development';
+const mode = NODE_ENV === 'production' ? 'production' : 'development';
+const react = NODE_ENV === 'production' ? 'production.min' : 'development';
 
 module.exports = {
   mode,
@@ -18,11 +20,18 @@ module.exports = {
   },
   resolve: {
     alias: {
-      react: path.join(__dirname, `vendor/react/build/dist/react.${mode}.js`),
+      react: path.join(__dirname, `vendor/react/build/dist/react.${react}.js`),
       'react-dom': path.join(
         __dirname,
-        `vendor/react/build/dist/react-dom.${mode}.js`,
+        `vendor/react/build/dist/react-dom.${react}.js`,
       ),
     },
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: `'${NODE_ENV}'`,
+      },
+    }),
+  ],
 };
