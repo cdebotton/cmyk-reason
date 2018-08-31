@@ -5,16 +5,9 @@
     {
       "dir": "app",
       "subdirs": true
-    },
-    {
-      "dir": "client",
-      "subdirs": true
     }
   ],
   "package-specs": [
-    {
-      "module": "commonjs"
-    },
     {
       "module": "es6"
     }

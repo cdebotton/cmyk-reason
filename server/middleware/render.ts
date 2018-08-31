@@ -13,6 +13,7 @@ function render() {
         '<body>' +
         '<main id="app">' +
         '</main>' +
+        '<script src="http://localhost:8080/vendors~main.bundle.js"></script>' +
         '<script src="http://localhost:8080/bundle.js"></script>' +
         '</body>' +
         '</html>';

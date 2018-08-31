@@ -5,11 +5,16 @@ const mode = NODE_ENV === 'production' ? NODE_ENV : 'development';
 
 module.exports = {
   mode,
-  entry: path.join(__dirname, 'lib', 'es6', 'client', 'Client.bs.js'),
+  entry: path.join(__dirname, 'lib', 'es6', 'app', 'index.bs.js'),
   output: {
     filename: 'bundle.js',
-    path: path.join(__dirname, 'dist/client'),
+    path: path.join(__dirname, 'dist'),
     publicPath: 'http://localhost:8080/',
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
   },
   resolve: {
     alias: {

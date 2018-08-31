@@ -1,4 +1,3 @@
-import React from 'react';
 import Koa, { Context } from 'koa';
 import mount from 'koa-mount';
 import serveStatic from 'koa-static';
@@ -7,10 +6,6 @@ import https from 'https';
 import path from 'path';
 import fs from 'fs';
 import { ApolloServer } from 'apollo-server-koa';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { SchemaLink } from 'apollo-link-schema';
-import { ApolloClient } from 'apollo-client';
-import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { Prisma } from 'prisma-binding';
 import render from './middleware/render';
 import schema from './api/schema';

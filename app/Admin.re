@@ -70,10 +70,8 @@ module LogoutButton = {
   };
 };
 
-let component = ReasonReact.statelessComponent("Admin");
-let make = _children => {
-  module Session = [%graphql
-    {|
+module Session = [%graphql
+  {|
   query Session {
     session {
       token
@@ -84,10 +82,21 @@ let make = _children => {
       }
     }
   |}
-  ];
+];
 
-  module SessionQuery = ReasonApollo.CreateQuery(Session);
+module SessionQuery = ReasonApollo.CreateQuery(Session);
 
+module AdminUsersConfig = {
+  module type t = (module type of AdminUsers);
+  let key = "AdminUsers";
+  let request = _ =>
+    DynamicImport.import("./AdminUsers.bs.js") |> DynamicImport.resolve;
+};
+
+module LazyAdminUsers = DynamicResource.Make(AdminUsersConfig);
+
+let component = ReasonReact.statelessComponent("Admin");
+let make = _children => {
   let admin =
     <div className=Styles.container>
       <div className=Styles.sidebar>
@@ -108,18 +117,24 @@ let make = _children => {
         </LogoutButton>
       </div>
       <div className=Styles.content>
-        <Router.Consumer>
-          ...{
-               ({path}) =>
-                 switch (path) {
-                 | ["admin"] => <p> {"Dashboard" |> ReasonReact.string} </p>
-                 | ["admin", "documents"] =>
-                   <p> {"Docs" |> ReasonReact.string} </p>
-                 | ["admin", "users", ..._rest] => <AdminUsers />
-                 | _ => <NotFound />
-                 }
-             }
-        </Router.Consumer>
+        <Placeholder
+          delayMs=300 fallback={<p> {"Loading..." |> ReasonReact.string} </p>}>
+          <Router.Consumer>
+            ...{
+                 ({path}) =>
+                   switch (path) {
+                   | ["admin"] => <p> {"Dashboard" |> ReasonReact.string} </p>
+                   | ["admin", "documents"] =>
+                     <p> {"Docs" |> ReasonReact.string} </p>
+                   | ["admin", "users", ..._rest] =>
+                     <LazyAdminUsers
+                       render=(((module AdminUsers)) => <AdminUsers />)
+                     />
+                   | _ => <NotFound />
+                   }
+               }
+          </Router.Consumer>
+        </Placeholder>
       </div>
       <div id="portal" />
     </div>;

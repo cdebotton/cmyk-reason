@@ -44,6 +44,24 @@ module Users = [%graphql
 
 module UsersQuery = ReasonApollo.CreateQuery(Users);
 
+module AdminCreateUserConfig = {
+  module type t = (module type of AdminCreateUser);
+  let key = "AdminCreateUser";
+  let request = _ =>
+    DynamicImport.import("./AdminCreateUser.bs.js") |> DynamicImport.resolve;
+};
+
+module LazyAdminCreateUser = DynamicResource.Make(AdminCreateUserConfig);
+
+module AdminUpdateUserConfig = {
+  module type t = (module type of AdminUpdateUser);
+  let key = "AdminUpdateUser";
+  let request = _ =>
+    DynamicImport.import("./AdminUpdateUser.bs.js") |> DynamicImport.resolve;
+};
+
+module LazyAdminUpdateUser = DynamicResource.Make(AdminUpdateUserConfig);
+
 let component = ReasonReact.statelessComponent("AdminUsers");
 
 let make = _children => {
@@ -65,7 +83,21 @@ let make = _children => {
                      label="Create a new user">
                      ...(
                           ({close}) =>
-                            <AdminCreateUser onSave=close onCancel=close />
+                            <Placeholder
+                              delayMs=300
+                              fallback={
+                                <p> {"Loading" |> ReasonReact.string} </p>
+                              }>
+                              <LazyAdminCreateUser
+                                render={
+                                  ((module AdminCreateUser)) =>
+                                    <AdminCreateUser
+                                      onSave=close
+                                      onCancel=close
+                                    />
+                                }
+                              />
+                            </Placeholder>
                         )
                    </Popover>
                    <ItemList
@@ -112,7 +144,16 @@ let make = _children => {
                         ({path}) =>
                           switch (path) {
                           | ["admin", "users", userId] =>
-                            <AdminUpdateUser userId />
+                            <Placeholder
+                              delayMs=300
+                              fallback={"Loading..." |> ReasonReact.string}>
+                              <LazyAdminUpdateUser
+                                render=(
+                                  ((module AdminUpdateUser)) =>
+                                    <AdminUpdateUser userId />
+                                )
+                              />
+                            </Placeholder>
                           | _ => ReasonReact.null
                           }
                       )
