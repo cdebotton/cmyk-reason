@@ -1,7 +1,3 @@
-open SimpleCacheProvider;
-
-let cache = SimpleCacheProvider.createCache();
-
 module type Config = {
   module type t;
   let key: string;
@@ -9,17 +5,22 @@ module type Config = {
 };
 
 module Make = (Config: Config) => {
+  open SimpleCacheProvider;
+  type t = (module Config.t);
+  type renderProp = t => ReasonReact.reactElement;
+
+  let cache: cache(string, t, string) = SimpleCacheProvider.createCache();
+
   let resource =
     SimpleCacheProvider.createResource(Config.request, key => key);
 
-  type renderProp = (module Config.t) => ReasonReact.reactElement;
   let component = ReasonReact.statelessComponent("DynamicComponent");
 
   let make = (~render: renderProp, _children) => {
     ...component,
     render: _self => {
       let data = resource->read(cache, Config.key);
-      render(data);
+      data;
     },
   };
 };
