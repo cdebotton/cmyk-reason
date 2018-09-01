@@ -9,7 +9,8 @@ module Make = (Config: Config) => {
   type t = (module Config.t);
   type renderProp = t => ReasonReact.reactElement;
 
-  let cache: cache(string, t, string) = SimpleCacheProvider.createCache();
+  let cache: cache(string, module Config.t, string) =
+    SimpleCacheProvider.createCache();
 
   let resource =
     SimpleCacheProvider.createResource(Config.request, key => key);
@@ -20,7 +21,7 @@ module Make = (Config: Config) => {
     ...component,
     render: _self => {
       let data = resource->read(cache, Config.key);
-      data;
+      render(data);
     },
   };
 };
