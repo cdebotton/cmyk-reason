@@ -6,14 +6,16 @@ module type Config = {
 
 module Make = (Config: Config) => {
   open SimpleCacheProvider;
+
   type t = (module Config.t);
   type renderProp = t => ReasonReact.reactElement;
 
-  let cache: cache(string, module Config.t, string) =
-    SimpleCacheProvider.createCache();
+  let cache: cache(string, t, unit) = SimpleCacheProvider.createCache();
 
   let resource =
     SimpleCacheProvider.createResource(Config.request, key => key);
+
+  let preload = () => resource->preload(cache, Config.key) |> ignore;
 
   let component = ReasonReact.statelessComponent("DynamicComponent");
 

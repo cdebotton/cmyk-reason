@@ -66,7 +66,9 @@ let component = ReasonReact.statelessComponent("AdminUsers");
 
 let make = _children => {
   ...component,
-  render: _self =>
+  render: _self => {
+    LazyAdminUpdateUser.preload();
+
     <UsersQuery>
       ...{
            ({result}) =>
@@ -154,6 +156,7 @@ let make = _children => {
                                 )
                               />
                             </Placeholder>
+
                           | _ => ReasonReact.null
                           }
                       )
@@ -161,5 +164,6 @@ let make = _children => {
                </div>
              }
          }
-    </UsersQuery>,
+    </UsersQuery>;
+  },
 };

@@ -18,3 +18,4 @@ type resource;
 external createResource: ('a => 'b, 'a => string) => resource = "";
 
 [@bs.send] external read: (resource, cache('k, 'v, 'a), 'k) => 'v = "";
+[@bs.send] external preload: (resource, cache('k, 'v, 'a), 'k) => 'v = "";
