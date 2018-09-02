@@ -1,7 +1,6 @@
 # import User from "./prisma.graphql"
 # import UserWhereInput from "./prisma.graphql"
 # import UserWhereUniqueInput from "./prisma.graphql"
-# import UserCreateInput from "./prisma.graphql"
 # import Role from "./prisma.graphql"
 
 type Session {
@@ -30,4 +29,12 @@ type Mutation {
 input UserUpdateInput {
   email: String!
   role: Role!
+}
+
+input UserCreateInput {
+  email: String!
+  password: String!
+  role: Role!
+  firstName: String!
+  lastName: String!
 }

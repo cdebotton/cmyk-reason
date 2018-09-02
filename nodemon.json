@@ -1,6 +1,6 @@
 {
   "ext": "ts,tsx,js,re,graphql",
-  "watch": ["app", "server", "lib/js/app"],
+  "watch": ["server"],
   "execMap": {
     "ts": "ts-node",
     "tsx": "ts-node"

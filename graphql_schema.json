@@ -4244,95 +4244,27 @@
               "name": "role",
               "description": "",
               "type": {
-                "kind": "ENUM",
-                "name": "Role",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "lastLogin",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "profile",
-              "description": "",
-              "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "ProfileCreateOneWithoutUserInput",
+                  "kind": "ENUM",
+                  "name": "Role",
                   "ofType": null
                 }
               },
               "defaultValue": null
             },
             {
-              "name": "documents",
-              "description": "",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "DocumentCreateManyWithoutAuthorInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ProfileCreateOneWithoutUserInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "create",
-              "description": "",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ProfileCreateWithoutUserInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "connect",
-              "description": "",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "ProfileWhereUniqueInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ProfileCreateWithoutUserInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
               "name": "firstName",
               "description": "",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             },
@@ -4340,119 +4272,6 @@
               "name": "lastName",
               "description": "",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "dateOfBirth",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "DateTime",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "ProfileWhereUniqueInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "id",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentCreateManyWithoutAuthorInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "create",
-              "description": "",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "DocumentCreateWithoutAuthorInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "connect",
-              "description": "",
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "INPUT_OBJECT",
-                    "name": "DocumentWhereUniqueInput",
-                    "ofType": null
-                  }
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentCreateWithoutAuthorInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "publishDate",
-              "description": "",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "DateTime",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "title",
-              "description": "",
-              "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
@@ -4460,118 +4279,6 @@
                   "name": "String",
                   "ofType": null
                 }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "type",
-              "description": "",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "DocumentTypeCreateOneWithoutDocumentsInput",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentTypeCreateOneWithoutDocumentsInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "create",
-              "description": "",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "DocumentTypeCreateWithoutDocumentsInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "connect",
-              "description": "",
-              "type": {
-                "kind": "INPUT_OBJECT",
-                "name": "DocumentTypeWhereUniqueInput",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentTypeCreateWithoutDocumentsInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "title",
-              "description": "",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentTypeWhereUniqueInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "id",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "defaultValue": null
-            }
-          ],
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "DocumentWhereUniqueInput",
-          "description": "",
-          "fields": null,
-          "inputFields": [
-            {
-              "name": "id",
-              "description": "",
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
               },
               "defaultValue": null
             }
@@ -5332,54 +5039,6 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
-            },
-            {
-              "name": "onOperation",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "Use `locations`."
-            },
-            {
-              "name": "onFragment",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "Use `locations`."
-            },
-            {
-              "name": "onField",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": true,
-              "deprecationReason": "Use `locations`."
             }
           ],
           "inputFields": null,
@@ -5434,6 +5093,12 @@
             {
               "name": "INLINE_FRAGMENT",
               "description": "Location adjacent to an inline fragment.",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "VARIABLE_DEFINITION",
+              "description": "Location adjacent to a variable definition.",
               "isDeprecated": false,
               "deprecationReason": null
             },
@@ -5568,7 +5233,7 @@
           "args": [
             {
               "name": "reason",
-              "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).",
+              "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax (as specified by [CommonMark](https://commonmark.org/).",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",

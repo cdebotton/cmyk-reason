@@ -50,8 +50,15 @@ const resolvers: IResolvers<{}, Context> = {
       return await context.db.mutation.createUser(
         {
           data: {
-            ...args.data,
             password,
+            email: args.data.email,
+            role: args.data.role,
+            profile: {
+              create: {
+                firstName: args.data.firstName,
+                lastName: args.data.lastName,
+              },
+            },
           },
         },
         info,

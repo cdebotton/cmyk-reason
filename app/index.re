@@ -9,13 +9,9 @@ let cache =
 
 let client = ReasonApollo.createApolloClient(~link, ~cache, ());
 
-ReactRoot.(
-  create("app")
-  ->render(
-      <ApolloProvider client>
-        <Router.Browser> <App /> </Router.Browser>
-      </ApolloProvider>,
-    )
-);
+let app =
+  <ApolloProvider client>
+    <Router.Browser> <App /> </Router.Browser>
+  </ApolloProvider>;
 
-[%bs.raw {| module.hot && module.hot.accept() |}];
+ReactRoot.(create("app")->render(app));
